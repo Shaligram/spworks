@@ -1,2 +1,22 @@
 git pull behind proxy
 git config --global http.proxy $http_proxy
+
+
+Adding proxy in Linux http://blog.rahuljain.org/2012/05/how-to-set-proxy-in-ubuntu-terminal.html
+
+If you are under a proxy server, and want to access net using http or ftp through Terminal,you will need to export http_proxy/ftp_proxy variables. 
+ For a HTTP proxy, simply run the following command in a terminal
+ export http_proxy='http://proxy_username:password@proxy_ip:port " 
+For a HTTPs and FTP  
+ export https_proxy=https://proxy_username:password@proxy_ip:port 
+ export ftp_proxy=ftp://proxy_username:password@proxy_ip:port   
+If there is no username and password required for your proxy then simply remove the username and password section. 
+
+" export https_proxy=https://proxy_ip:port "
+These settings are saved into  /etc/apt/apt.conf file .So you can directly add these variables using text editor .First open the apt.conf file
+" sudo gedit /etc/apt/apt.conf "
+then enter the username,password,proxy_ip and port in given format
+ Acquire::http::proxy "http://proxy_username:password@proxy_ip:port ";
+ Acquire::https::proxy "https://proxy_username:password@proxy_ip:port" ;
+ Acquire::ftp::proxy "ftp://proxy_username:password@proxy_ip:port ";
+ 
