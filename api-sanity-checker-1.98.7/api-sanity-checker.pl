@@ -9677,6 +9677,7 @@ sub initializeParameter(@)
     }
     elsif($ParamDesc{"Usage"} eq "Common")
     {
+            print_before("typeinit",%ParamDesc);
         my %Type_Init = initializeType((
             "Interface" => $ParamDesc{"Interface"},
             "TypeId" => $ParamDesc{"TypeId"},
@@ -9702,6 +9703,7 @@ sub initializeParameter(@)
             "IsString" => $ParamDesc{"IsString"},
             "FuncPtrName" => $ParamDesc{"FuncPtrName"},
             "FuncPtrTypeId" => $ParamDesc{"FuncPtrTypeId"}));
+            print_after("type_init",%Type_Init);
         if(not $Type_Init{"IsCorrect"})
         {
             pop(@RecurSpecType);
@@ -11966,7 +11968,7 @@ sub generateTest($)
     my %Result = ();
     my $Interface = $_[0];
     return () if(not $Interface);
-    
+        print "RUN ----------------->$start\n";
     my $CommonCode = "";
     my %TestComponents = ();
     $TestedInterface = $Interface;
@@ -14889,6 +14891,32 @@ sub scenario()
         exit($ResultCounter{"Run"}{"Fail"}!=0);
     }
     exit($ResultCounter{"Build"}{"Fail"}!=0);
+}
+sub print_after(@)
+{
+    my ( $hashname, %hash ) = @_;
+    print "\n----------After--$hashname---\n";
+    foreach $key (sort (keys(%hash))) {
+       print "\t\t$key \t\t$hash{$key}\n";
+   }
+    print "\n##########After end###########\n";
+
+}
+sub print_before(@)
+{
+    my ( $hashname, %hash ) = @_;
+    print "\n----------before--$hashname---\n";
+    
+    foreach $key (sort (keys(%hash))) {
+       print "\t\t$key \t\t$hash{$key}\n";
+   }
+
+
+   # while (my ($key, $value) = each %hash) {
+   #     print "$key -> $value\n";
+   # }
+    print "\n########before end################\n";
+
 }
 
 scenario();
