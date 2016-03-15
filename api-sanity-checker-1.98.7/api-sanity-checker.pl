@@ -8248,19 +8248,22 @@ sub getSomeEnumMember($)
     foreach my $MembPos (sort{int($a)<=>int($b)} keys(%{$Enum{"Memb"}})) {
         push(@Members, $Enum{"Memb"}{$MembPos}{"name"});
     }
-    if($RandomCode) {
+    if($RandomCode) 
+    {
         @Members = mix_array(@Members);
     }
     my @ValidMembers = ();
     foreach my $Member (@Members)
     {
-        if(is_valid_constant($Member)) {
+        #if(is_valid_constant($Member)) 
+        {
             push(@ValidMembers, $Member);
         }
     }
     my $MemberName = $Members[0];
-    if($#ValidMembers>=0) {
-        $MemberName = $ValidMembers[0];
+    #if($#ValidMembers>=0) 
+    {
+        $MemberName = $ValidMembers[$start];
     }
     if($Enum{"NameSpace"} and $MemberName
     and getSymLang($TestedInterface) eq "C++") {
@@ -11967,9 +11970,28 @@ sub esc_option($$)
 
 sub generateTest($)
 {
-    my %Result = ();
     my $Interface = $_[0];
     return () if(not $Interface);
+    our $start =0; 
+    our $end=2;
+    my $SanityTestfullBody = ();
+    my $TestPath = getTestPath($Interface);
+    { # create stuff for building and running test
+        if(-e $TestPath) {
+            rmtree($TestPath);
+        }
+        mkpath($TestPath);
+    }
+    for( $start=0; $start<$end;$start++)
+    {
+        # reset global state
+        restore_state(());
+        @RecurInterface = ();
+        @RecurTypeId = ();
+        @RecurSpecType = ();
+        %SubClass_Created = ();
+    
+    my %Result = ();
     my $CommonCode = "";
     my %TestComponents = ();
     $TestedInterface = $Interface;
@@ -12065,7 +12087,7 @@ sub generateTest($)
         $Finalization .= "fclose($Stream);\n";
     }
     # assemble test
-    my ($SanityTest, $SanityTestMain, $SanityTestBody) = ();
+    our ($SanityTest, $SanityTestMain, $SanityTestBody) = ();
     if($CommonPreamble.$Preamble)
     {
         $SanityTestMain .= "//preamble\n";
@@ -12083,6 +12105,7 @@ sub generateTest($)
     }
     if($TestComponents{"Call"})
     {
+        #Trace  this Shaligram only function call is added inside this, Before this only Body and paramters are set
         if($TestComponents{"ReturnRequirement"} and $CompleteSignature{$Interface}{"Return"})
         { # call interface and check return value
             my $ReturnType_Id = $CompleteSignature{$Interface}{"Return"};
@@ -12121,7 +12144,7 @@ sub generateTest($)
             }
         }
         else {
-            $SanityTestBody .= $TestComponents{"Call"}."; //target call\n";
+            $SanityTestBody .= $TestComponents{"Call"}."; //target call\n\n";
         }
     }
     elsif($CompleteSignature{$Interface}{"Destructor"}) {
@@ -12209,11 +12232,13 @@ sub generateTest($)
         $SanityTest .= "\n$CommonCode\n\n";
         $Result{"Code"} = $CommonCode;
     }
+    $SanityTestfullBody .= $SanityTestMain;
     $SanityTest .= "int main(int argc, char *argv[])\n";
     $SanityTest .= "{\n";
-    $Result{"main"} = correct_spaces($SanityTestMain);
-    $SanityTestMain .= "    return 0;\n";
-    $SanityTest .= $SanityTestMain;
+    $Result{"main"} = correct_spaces($SanityTestfullBody);
+    $SanityTest .= $SanityTestfullBody;
+}
+    $SanityTest.= "    return 0;\n";
     $SanityTest .= "}\n";
     $SanityTest = correct_spaces($SanityTest); # cleaning code
     if(getTestLang($Interface) eq "C++" and getSymLang($Interface) eq "C")
@@ -12224,13 +12249,10 @@ sub generateTest($)
     { # create stuff for building and running test
         my $TestFileName = (getTestLang($Interface) eq "C++")?"test.cpp":"test.c";
         my $TestPath = getTestPath($Interface);
-        if(-e $TestPath) {
-            rmtree($TestPath);
-        }
-        mkpath($TestPath);
         $Interface_TestDir{$Interface} = $TestPath;
         $SanityTest = add_VirtualTestData($SanityTest, $TestPath."/testdata/");
         $SanityTest = add_TestData($SanityTest, $TestPath."/testdata/");
+        #this write onto the Shaligram ---- test.c file 
         writeFile("$TestPath/$TestFileName", $SanityTest);
         my $SharedObject = $Symbol_Library{$Interface};
         $SharedObject = $DepSymbol_Library{$Interface} if(not $SharedObject);
@@ -12709,6 +12731,21 @@ sub get_paragraph($$)
         $MinParagraph .= " ";
     }
     return $MinParagraph;
+}
+
+sub writeCFile($$)
+{
+    my ($Path, $Content) = @_;
+    return if(not $Path);
+    if(my $Dir = get_dirname($Path)) {
+        mkpath($Dir);
+    }
+    open (SHAL_CFILE, ">>".$Path) || die ("can't open file \'$Path\': $!\n");
+   
+    printMsg("INFO", "file create shaligram $Path $Content");
+    print SHAL_CFILE $Content;
+    print SHAL_CFILE "\n";
+    close(SHAL_CFILE);
 }
 
 sub writeFile($$)
