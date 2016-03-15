@@ -8126,6 +8126,8 @@ sub assembleStruct(@)
         else {
             $Memb_Key = ($Init_Desc{"Key"})?$Init_Desc{"Key"}."_".($Member_Pos+1):"m".($Member_Pos+1);
         }
+#Important part for degenerate the Structure to next structure
+        
         my %Memb_Init = initializeParameter((
             "TypeId" => $MemberType_Id,
             "Key" => $Memb_Key,
@@ -9677,7 +9679,7 @@ sub initializeParameter(@)
     }
     elsif($ParamDesc{"Usage"} eq "Common")
     {
-            print_before("typeinit",%ParamDesc);
+#            print_before("typeinit",%ParamDesc);
         my %Type_Init = initializeType((
             "Interface" => $ParamDesc{"Interface"},
             "TypeId" => $ParamDesc{"TypeId"},
@@ -9703,7 +9705,7 @@ sub initializeParameter(@)
             "IsString" => $ParamDesc{"IsString"},
             "FuncPtrName" => $ParamDesc{"FuncPtrName"},
             "FuncPtrTypeId" => $ParamDesc{"FuncPtrTypeId"}));
-            print_after("type_init",%Type_Init);
+#            print_after("type_init",%Type_Init);
         if(not $Type_Init{"IsCorrect"})
         {
             pop(@RecurSpecType);
@@ -11968,7 +11970,6 @@ sub generateTest($)
     my %Result = ();
     my $Interface = $_[0];
     return () if(not $Interface);
-        print "RUN ----------------->$start\n";
     my $CommonCode = "";
     my %TestComponents = ();
     $TestedInterface = $Interface;
@@ -14895,27 +14896,27 @@ sub scenario()
 sub print_after(@)
 {
     my ( $hashname, %hash ) = @_;
-    print "\n----------After--$hashname---\n";
+    print "\n\t\t\t\t##########After--$hashname#########\n";
     foreach $key (sort (keys(%hash))) {
-       print "\t\t$key \t\t$hash{$key}\n";
+        printf("\t\t\t\t%20s  %-20s\n", $key, $hash{$key});
    }
-    print "\n##########After end###########\n";
+    print "\t\t\t\t##########After end###########\n";
 
 }
 sub print_before(@)
 {
     my ( $hashname, %hash ) = @_;
-    print "\n----------before--$hashname---\n";
+    print "\n##########before--$hashname#########\n";
     
     foreach $key (sort (keys(%hash))) {
-       print "\t\t$key \t\t$hash{$key}\n";
+        printf("%20s  %-20s\n", $key, $hash{$key});
    }
 
 
    # while (my ($key, $value) = each %hash) {
    #     print "$key -> $value\n";
    # }
-    print "\n########before end################\n";
+    print "########before end################\n";
 
 }
 
