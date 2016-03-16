@@ -1,0 +1,13 @@
+<version>
+    0.1
+</version>
+
+<headers>
+    /home/shaligram/rte_include
+    /home/shaligram/install/include/
+</headers>
+
+<libs>
+    /home/shaligram/install/lib.linux-arma15/libethernet.so
+</libs>
+

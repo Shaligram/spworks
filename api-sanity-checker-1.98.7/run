@@ -1,0 +1,2 @@
+sudo make install prefix=/usr;api-sanity-checker -show-retval -check-retval -lib NAME -d VER.xml -gen -specialized-types SPECIAL_TYPE.xml  -show-retval -cache -disable-variable-reuse
+
