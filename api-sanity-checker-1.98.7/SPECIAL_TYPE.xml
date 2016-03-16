@@ -144,7 +144,7 @@
         } else {
                   printf("ADK software initialized. System handle: 0x%08x\n",(ncp_uint32_t) sys_handle);
         }
-        retVal = adk_module_register(sys_handle,(ncp_uint8_t *) ADK_ETHERNET_MODULE_NAME, (adk_module_init_func_t) adk_ethernet_init,&module_handle_t);
+        retVal = adk_module_register(sys_handle,(ncp_uint8_t *) ADK_ETHERNET_MODULE_NAME, (adk_module_init_func_t) adk_ethernet_init,&eth_module_handle);
         if (retVal != ADK_SUCCESS) return(ADK_E_MODULE_NOT_REGISTERED);
         ---------------------------------------------------------------------------------------
 

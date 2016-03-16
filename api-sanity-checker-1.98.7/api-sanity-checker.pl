@@ -11977,8 +11977,8 @@ sub generateTest($)
 {
     my $Interface = $_[0];
     return () if(not $Interface);
-    our $start =0; 
-    our $end=10;
+    our $loopstart=0; 
+    our $loopend=10;
     my $SanityTestfullBody = ();
     my $TestPath = getTestPath($Interface);
     { # create stuff for building and running test
@@ -11987,7 +11987,7 @@ sub generateTest($)
         }
         mkpath($TestPath);
     }
-    for( $start=0; $start<$end;$start++)
+    for( $loopstart=0; $loopstart<$loopend;$loopstart++)
     {
         # reset global state
         restore_state(());
@@ -11995,259 +11995,260 @@ sub generateTest($)
         @RecurTypeId = ();
         @RecurSpecType = ();
         %SubClass_Created = ();
-    
-    my %Result = ();
-    my $CommonCode = "";
-    my %TestComponents = ();
-    $TestedInterface = $Interface;
-    $CurrentBlock = "main";
-    $ValueCollection{$CurrentBlock}{"argc"} = get_TypeIdByName("int");
-    $Block_Param{$CurrentBlock}{"argc"} = get_TypeIdByName("int");
-    $Block_Variable{$CurrentBlock}{"argc"} = 1;
-    $ValueCollection{$CurrentBlock}{"argv"} = get_TypeIdByName("char**");
-    $Block_Param{$CurrentBlock}{"argv"} = get_TypeIdByName("char**");
-    $Block_Variable{$CurrentBlock}{"argv"} = 1;
-    
-    my ($CommonPreamble, $Preamble, $Finalization, $Env_CommonCode, $Env_PreRequirements, $Env_PostRequirements, $One_timeCode) = ();
-    foreach my $SpecEnv_Id (sort {int($a)<=>int($b)} (keys(%Common_SpecEnv)))
-    { # common environments
-        next if($Common_SpecType_Exceptions{$Interface}{$SpecEnv_Id});
-        my %Conditions = get_env_conditions($Interface, $SpecEnv_Id);
-        $CommonPreamble .= $Conditions{"Preamble"};# in the direct order
-        $Finalization = $Conditions{"Finalization"}.$Finalization;# in the backward order
-        $Env_CommonCode .= $Conditions{"Env_CommonCode"};
-        $Env_PreRequirements .= $Conditions{"Env_PreRequirements"};# in the direct order
-        $Env_PostRequirements = $Conditions{"Env_PostRequirements"}.$Env_PostRequirements;# in the backward order
-        $One_timeCode = $Conditions{"OnetimeCode"};
-    }
-    
-    my %OnetimeCode_Parsed = parseCode($One_timeCode, "Code");
-    # parsing of common preamble code for using
-    # created variables in the following test case
-    my %CommonPreamble_Parsed = parseCode($CommonPreamble, "Code");
-    $CommonPreamble = $CommonPreamble_Parsed{"Code"};
-    $CommonCode = $CommonPreamble_Parsed{"NewGlobalCode"}.$CommonCode;
-    $TestComponents{"Headers"} = addHeaders($CommonPreamble_Parsed{"Headers"}, $TestComponents{"Headers"});
-    
-    # creating test case
-    if($CompleteSignature{$Interface}{"Constructor"})
-    {
-        %TestComponents = testForConstructor($Interface);
-        $CommonCode .= $TestComponents{"Code"};
-    }
-    elsif($CompleteSignature{$Interface}{"Destructor"})
-    {
-        %TestComponents = testForDestructor($Interface);
-        $CommonCode .= $TestComponents{"Code"};
-    }
-    else
-    {
-        %TestComponents = callInterface((
-            "Interface"=>$Interface));
-        $CommonCode .= $TestComponents{"Code"};
-    }
-    if(not $TestComponents{"IsCorrect"})
-    {
-        $ResultCounter{"Gen"}{"Fail"} += 1;
-        $GenResult{$Interface}{"IsCorrect"} = 0;
-        return ();
-    }
-    if($TraceFunc{"REQ"} and not defined $Template2Code) {
-        $CommonCode = get_REQ_define($Interface)."\n".$CommonCode;
-    }
-    if($TraceFunc{"REQva"} and not defined $Template2Code) {
-        $CommonCode = get_REQva_define($Interface)."\n".$CommonCode;
-    }
-    
-    foreach my $SpecEnv_Id (sort {int($a)<=>int($b)} (keys(%SpecEnv)))
-    { # environments used in the test case
-        my %Conditions = get_env_conditions($Interface, $SpecEnv_Id);
-        $Preamble .= $Conditions{"Preamble"};# in the direct order
-        $Finalization = $Conditions{"Finalization"}.$Finalization;# in the backward order
-        $Env_CommonCode .= $Conditions{"Env_CommonCode"};
-        $Env_PreRequirements .= $Conditions{"Env_PreRequirements"};# in the direct order
-        $Env_PostRequirements = $Conditions{"Env_PostRequirements"}.$Env_PostRequirements;# in the backward order
-    }
-    
-    my %Preamble_Parsed = parseCode($Preamble, "Code");
-    $Preamble = $Preamble_Parsed{"Code"};
-    $CommonCode = $Preamble_Parsed{"NewGlobalCode"}.$CommonCode;
-    $TestComponents{"Headers"} = addHeaders($Preamble_Parsed{"Headers"}, $TestComponents{"Headers"});
-    
-    my %Finalization_Parsed = parseCode($Finalization, "Code");
-    $Finalization = $Finalization_Parsed{"Code"};
-    $CommonCode = $Finalization_Parsed{"NewGlobalCode"}.$CommonCode;
-    $TestComponents{"Headers"} = addHeaders($Finalization_Parsed{"Headers"}, $TestComponents{"Headers"});
-    
-    my %Env_ParsedCode = parseCode($Env_CommonCode, "Code");
-    $CommonCode = $Env_ParsedCode{"NewGlobalCode"}.$Env_ParsedCode{"Code"}.$CommonCode;
-    $TestComponents{"Headers"} = addHeaders($Env_ParsedCode{"Headers"}, $TestComponents{"Headers"});
-    foreach my $Header (@{$Env_ParsedCode{"Headers"}}) {
-        $SpecTypeHeaders{get_filename($Header)}=1;
-    }
-    # insert subclasses
-    my ($SubClasses_Code, $SubClasses_Headers) = create_SubClasses(keys(%Create_SubClass));
-    $TestComponents{"Headers"} = addHeaders($SubClasses_Headers, $TestComponents{"Headers"});
-    $CommonCode = $SubClasses_Code.$CommonCode;
-    # close streams
-    foreach my $Stream (keys(%{$OpenStreams{"main"}})) {
-        $Finalization .= "fclose($Stream);\n";
-    }
-    # assemble test
-    our ($SanityTest, $SanityTestMain, $SanityTestBody) = ();
-    if($CommonPreamble.$Preamble)
-    {
-        $SanityTestMain .= "//preamble\n";
-        $SanityTestMain .= $CommonPreamble.$Preamble."\n";
-    }
-    if($Env_PreRequirements) {
-        $SanityTestMain .= $Env_PreRequirements."\n";
-    }
-    if($TestComponents{"Init"}) {
-        $SanityTestBody .= $TestComponents{"Init"};
-    }
-    # precondition for parameters
-    if($TestComponents{"PreCondition"}) {
-        $SanityTestBody .= $TestComponents{"PreCondition"};
-    }
-    if($TestComponents{"Call"})
-    {
-        #Trace  this Shaligram only function call is added inside this, Before this only Body and paramters are set
-        if($TestComponents{"ReturnRequirement"} and $CompleteSignature{$Interface}{"Return"})
-        { # call interface and check return value
-            my $ReturnType_Id = $CompleteSignature{$Interface}{"Return"};
-            my $ReturnType_Name = $TypeInfo{$ReturnType_Id}{"Name"};
-            my $ReturnType_PointerLevel = get_PointerLevel($ReturnType_Id);
-            my $ReturnFType_Id = get_FoundationTypeId($ReturnType_Id);
-            my $ReturnFType_Name = get_TypeName($ReturnFType_Id);
-            if($ReturnFType_Name eq "void" and $ReturnType_PointerLevel==1)
-            {
-                my $RetVal = select_var_name("retval", "");
-                $TestComponents{"ReturnRequirement"}=~s/(\$0|\$retval)/$RetVal/gi;
-                $SanityTestBody .= "int* $RetVal = (int*)".$TestComponents{"Call"}."; //target call\n";
-                $Block_Variable{$CurrentBlock}{$RetVal} = 1;
-            }
-            elsif($ReturnFType_Name eq "void" and $ReturnType_PointerLevel==0) {
-                $SanityTestBody .= $TestComponents{"Call"}."; //target call\n";
-            }
-            else
-            {
-                my $RetVal = select_var_name("retval", "");
-                $TestComponents{"ReturnRequirement"}=~s/(\$0|\$retval)/$RetVal/gi;
-                my ($InitializedEType_Id, $Declarations, $Headers) = get_ExtTypeId($RetVal, $ReturnType_Id);
-                my $InitializedType_Name = get_TypeName($InitializedEType_Id);
-                $TestComponents{"Code"} .= $Declarations;
-                $TestComponents{"Headers"} = addHeaders($Headers, $TestComponents{"Headers"});
-                my $Break = ((length($InitializedType_Name)>20)?"\n":" ");
-                my $InitializedFType_Id = get_FoundationTypeId($ReturnType_Id);
-                if(($InitializedType_Name eq $ReturnType_Name)) {
-                    $SanityTestBody .= $ReturnType_Name.$Break.$RetVal." = ".$TestComponents{"Call"}."; //target call\n";
-                }
-                else {
-                    $SanityTestBody .= $InitializedType_Name.$Break.$RetVal." = "."(".$InitializedType_Name.")".$TestComponents{"Call"}."; //target call\n";
-                }
-                $Block_Variable{$CurrentBlock}{$RetVal} = 1;
-                $TestComponents{"Headers"} = addHeaders(getTypeHeaders($InitializedFType_Id), $TestComponents{"Headers"});
-            }
+
+        my %Result = ();
+        my $CommonCode = "";
+        my %TestComponents = ();
+        $TestedInterface = $Interface;
+        $CurrentBlock = "main";
+        $ValueCollection{$CurrentBlock}{"argc"} = get_TypeIdByName("int");
+        $Block_Param{$CurrentBlock}{"argc"} = get_TypeIdByName("int");
+        $Block_Variable{$CurrentBlock}{"argc"} = 1;
+        $ValueCollection{$CurrentBlock}{"argv"} = get_TypeIdByName("char**");
+        $Block_Param{$CurrentBlock}{"argv"} = get_TypeIdByName("char**");
+        $Block_Variable{$CurrentBlock}{"argv"} = 1;
+
+        my ($CommonPreamble, $Preamble, $Finalization, $Env_CommonCode, $Env_PreRequirements, $Env_PostRequirements, $One_timeCode) = ();
+        foreach my $SpecEnv_Id (sort {int($a)<=>int($b)} (keys(%Common_SpecEnv)))
+        { # common environments
+            next if($Common_SpecType_Exceptions{$Interface}{$SpecEnv_Id});
+            my %Conditions = get_env_conditions($Interface, $SpecEnv_Id);
+            $CommonPreamble .= $Conditions{"Preamble"};# in the direct order
+            $Finalization = $Conditions{"Finalization"}.$Finalization;# in the backward order
+            $Env_CommonCode .= $Conditions{"Env_CommonCode"};
+            $Env_PreRequirements .= $Conditions{"Env_PreRequirements"};# in the direct order
+            $Env_PostRequirements = $Conditions{"Env_PostRequirements"}.$Env_PostRequirements;# in the backward order
+            $One_timeCode = $Conditions{"OnetimeCode"};
         }
-        else {
-            $SanityTestBody .="retVal=".$TestComponents{"Call"}."\n";
-        }
-    }
-    elsif($CompleteSignature{$Interface}{"Destructor"}) {
-        $SanityTestBody .= "//target interface will be called at the end of main() function automatically\n";
-    }
-    if($TestComponents{"ReturnRequirement"}) {
-        $SanityTestBody .= $TestComponents{"ReturnRequirement"}."\n";
-    }
-    # postcondition for parameters
-    if($TestComponents{"PostCondition"}) {
-        $SanityTestBody .= $TestComponents{"PostCondition"}."\n";
-    }
-    if($TestComponents{"FinalCode"})
-    {
-    # $SanityTestBody .= "//final code\n";
-        $SanityTestBody .= $TestComponents{"FinalCode"}."\n";
-        $SanityTestBody .="------------------------------------------------------------------------------------------\n";
-#        $age=<>;
-    }
-    $SanityTestMain .= $SanityTestBody;
-    if($Finalization)
-    {
-        $SanityTestMain .= "\n//finalization\n";
-        $SanityTestMain .= $Finalization."\n";
-    }
-    if($Env_PostRequirements) {
-        $SanityTestMain .= $Env_PostRequirements."\n";
-    }
-    if(my $AddDefines = $Descriptor{"Defines"})
-    {
-        $AddDefines=~s/\n\s+/\n/g;
-        $SanityTest .= $AddDefines."\n";
-    }
-    # clear code syntax
-    $SanityTestMain = alignCode($SanityTestMain, "    ", 0);
-    @{$TestComponents{"Headers"}} = reverse(@{$TestComponents{"Headers"}});
-    if(keys(%ConstraintNum)>0)
-    {
-        if(getTestLang($Interface) eq "C++")
+
+        my %OnetimeCode_Parsed = parseCode($One_timeCode, "Code");
+        # parsing of common preamble code for using
+        # created variables in the following test case
+        my %CommonPreamble_Parsed = parseCode($CommonPreamble, "Code");
+        $CommonPreamble = $CommonPreamble_Parsed{"Code"};
+        $CommonCode = $CommonPreamble_Parsed{"NewGlobalCode"}.$CommonCode;
+        $TestComponents{"Headers"} = addHeaders($CommonPreamble_Parsed{"Headers"}, $TestComponents{"Headers"});
+
+        # creating test case
+        if($CompleteSignature{$Interface}{"Constructor"})
         {
-            $TestComponents{"Headers"} = addHeaders(["iostream"], $TestComponents{"Headers"});
-            $AuxHeaders{"iostream"} = 1;
+            %TestComponents = testForConstructor($Interface);
+            $CommonCode .= $TestComponents{"Code"};
+        }
+        elsif($CompleteSignature{$Interface}{"Destructor"})
+        {
+            %TestComponents = testForDestructor($Interface);
+            $CommonCode .= $TestComponents{"Code"};
         }
         else
         {
-            $TestComponents{"Headers"} = addHeaders(["stdio.h"], $TestComponents{"Headers"});
-            $AuxHeaders{"stdio.h"} = 1;
+            %TestComponents = callInterface((
+                    "Interface"=>$Interface));
+            $CommonCode .= $TestComponents{"Code"};
         }
-    }
-    @{$TestComponents{"Headers"}} = (@Include_Preamble, @{$TestComponents{"Headers"}});
-    
-    if(keys(%Include_Order))
-    {
-        if(grep {defined $Include_Order{$_}} @{$TestComponents{"Headers"}}) {
-            $TestComponents{"Headers"} = orderHeaders($TestComponents{"Headers"});
+        if(not $TestComponents{"IsCorrect"})
+        {
+            $ResultCounter{"Gen"}{"Fail"} += 1;
+            $GenResult{$Interface}{"IsCorrect"} = 0;
+            return ();
         }
-    }
-    
-    my ($Headers, $IncPaths) = prepareHeaders(@{$TestComponents{"Headers"}});
-    
-    $Result{"Headers"} = [];
-    my $HList = "";
-    foreach my $Header (@{$Headers})
-    {
-        $HList .= "#include <".$Header.">\n";
-        push(@{$Result{"Headers"}}, $Header);
-        if($Header=~/\+\+(\.h|)\Z/) {
-            $UsedInterfaces{"__gxx_personality"} = 1;
+        if($TraceFunc{"REQ"} and not defined $Template2Code) {
+            $CommonCode = get_REQ_define($Interface)."\n".$CommonCode;
         }
-    }
-    $SanityTest .= $HList;
-    
-    my %UsedNameSpaces = ();
-    foreach my $NameSpace (add_namespaces(\$CommonCode), add_namespaces(\$SanityTestMain)) {
-        $UsedNameSpaces{$NameSpace} = 1;
-    }
-    if(keys(%UsedNameSpaces))
-    {
-        $SanityTest .= "\n";
-        foreach my $NameSpace (sort {get_depth($a,"::")<=>get_depth($b,"::")} keys(%UsedNameSpaces)) {
-            $SanityTest .= "using namespace $NameSpace;\n";
+        if($TraceFunc{"REQva"} and not defined $Template2Code) {
+            $CommonCode = get_REQva_define($Interface)."\n".$CommonCode;
         }
-        $SanityTest .= "\n";
-    }
-    if($CommonCode)
-    {
-        $SanityTest .= "\n$CommonCode\n\n";
-        $Result{"Code"} = $CommonCode;
-    }
-    $SanityTestfullBody .= $SanityTestMain;
-    $SanityTest .= "int main(int argc, char *argv[])\n";
-    $SanityTest .= "{\n";
-    $SanityTest .= alignCode($OnetimeCode_Parsed{"Code"}, "    ", 0)."\n";
-    $Result{"main"} = correct_spaces($SanityTestfullBody);
-    $SanityTest .= $SanityTestfullBody;
-}
+
+        foreach my $SpecEnv_Id (sort {int($a)<=>int($b)} (keys(%SpecEnv)))
+        { # environments used in the test case
+            my %Conditions = get_env_conditions($Interface, $SpecEnv_Id);
+            $Preamble .= $Conditions{"Preamble"};# in the direct order
+            $Finalization = $Conditions{"Finalization"}.$Finalization;# in the backward order
+            $Env_CommonCode .= $Conditions{"Env_CommonCode"};
+            $Env_PreRequirements .= $Conditions{"Env_PreRequirements"};# in the direct order
+            $Env_PostRequirements = $Conditions{"Env_PostRequirements"}.$Env_PostRequirements;# in the backward order
+        }
+
+        my %Preamble_Parsed = parseCode($Preamble, "Code");
+        $Preamble = $Preamble_Parsed{"Code"};
+        $CommonCode = $Preamble_Parsed{"NewGlobalCode"}.$CommonCode;
+        $TestComponents{"Headers"} = addHeaders($Preamble_Parsed{"Headers"}, $TestComponents{"Headers"});
+
+        my %Finalization_Parsed = parseCode($Finalization, "Code");
+        $Finalization = $Finalization_Parsed{"Code"};
+        $CommonCode = $Finalization_Parsed{"NewGlobalCode"}.$CommonCode;
+        $TestComponents{"Headers"} = addHeaders($Finalization_Parsed{"Headers"}, $TestComponents{"Headers"});
+
+        my %Env_ParsedCode = parseCode($Env_CommonCode, "Code");
+        $CommonCode = $Env_ParsedCode{"NewGlobalCode"}.$Env_ParsedCode{"Code"}.$CommonCode;
+        $TestComponents{"Headers"} = addHeaders($Env_ParsedCode{"Headers"}, $TestComponents{"Headers"});
+        foreach my $Header (@{$Env_ParsedCode{"Headers"}}) {
+            $SpecTypeHeaders{get_filename($Header)}=1;
+        }
+        # insert subclasses
+        my ($SubClasses_Code, $SubClasses_Headers) = create_SubClasses(keys(%Create_SubClass));
+        $TestComponents{"Headers"} = addHeaders($SubClasses_Headers, $TestComponents{"Headers"});
+        $CommonCode = $SubClasses_Code.$CommonCode;
+        # close streams
+        foreach my $Stream (keys(%{$OpenStreams{"main"}})) {
+            $Finalization .= "fclose($Stream);\n";
+        }
+        # assemble test
+        our ($SanityTest, $SanityTestMain, $SanityTestBody) = ();
+        if($CommonPreamble.$Preamble)
+        {
+            $SanityTestMain .= "//preamble\n";
+            $SanityTestMain .= $CommonPreamble.$Preamble."\n";
+        }
+        if($Env_PreRequirements) {
+            $SanityTestMain .= $Env_PreRequirements."\n";
+        }
+        if($TestComponents{"Init"}) {
+            $SanityTestBody .= $TestComponents{"Init"};
+        }
+        # precondition for parameters
+        if($TestComponents{"PreCondition"}) {
+            $SanityTestBody .= $TestComponents{"PreCondition"};
+        }
+        if($TestComponents{"Call"})
+        {
+            #Trace  this Shaligram only function call is added inside this, Before this only Body and paramters are set
+            if($TestComponents{"ReturnRequirement"} and $CompleteSignature{$Interface}{"Return"})
+            { # call interface and check return value
+                my $ReturnType_Id = $CompleteSignature{$Interface}{"Return"};
+                my $ReturnType_Name = $TypeInfo{$ReturnType_Id}{"Name"};
+                my $ReturnType_PointerLevel = get_PointerLevel($ReturnType_Id);
+                my $ReturnFType_Id = get_FoundationTypeId($ReturnType_Id);
+                my $ReturnFType_Name = get_TypeName($ReturnFType_Id);
+                if($ReturnFType_Name eq "void" and $ReturnType_PointerLevel==1)
+                {
+                    my $RetVal = select_var_name("retval", "");
+                    $TestComponents{"ReturnRequirement"}=~s/(\$0|\$retval)/$RetVal/gi;
+                    $SanityTestBody .= "int* $RetVal = (int*)".$TestComponents{"Call"}."; //target call\n";
+                    $Block_Variable{$CurrentBlock}{$RetVal} = 1;
+                }
+                elsif($ReturnFType_Name eq "void" and $ReturnType_PointerLevel==0) {
+                    $SanityTestBody .= $TestComponents{"Call"}."; //target call\n";
+                }
+                else
+                {
+                    my $RetVal = select_var_name("retval", "");
+                    $TestComponents{"ReturnRequirement"}=~s/(\$0|\$retval)/$RetVal/gi;
+                    my ($InitializedEType_Id, $Declarations, $Headers) = get_ExtTypeId($RetVal, $ReturnType_Id);
+                    my $InitializedType_Name = get_TypeName($InitializedEType_Id);
+                    $TestComponents{"Code"} .= $Declarations;
+                    $TestComponents{"Headers"} = addHeaders($Headers, $TestComponents{"Headers"});
+                    my $Break = ((length($InitializedType_Name)>20)?"\n":" ");
+                    my $InitializedFType_Id = get_FoundationTypeId($ReturnType_Id);
+                    if(($InitializedType_Name eq $ReturnType_Name)) {
+                        $SanityTestBody .= $ReturnType_Name.$Break.$RetVal." = ".$TestComponents{"Call"}."; //target call\n";
+                    }
+                    else {
+                        $SanityTestBody .= $InitializedType_Name.$Break.$RetVal." = "."(".$InitializedType_Name.")".$TestComponents{"Call"}."; //target call\n";
+                    }
+                    $Block_Variable{$CurrentBlock}{$RetVal} = 1;
+                    $TestComponents{"Headers"} = addHeaders(getTypeHeaders($InitializedFType_Id), $TestComponents{"Headers"});
+                }
+            }
+            else {
+                $SanityTestBody .="retVal=".$TestComponents{"Call"}."\n";
+            }
+        }
+        elsif($CompleteSignature{$Interface}{"Destructor"}) {
+            $SanityTestBody .= "//target interface will be called at the end of main() function automatically\n";
+        }
+        if($TestComponents{"ReturnRequirement"}) {
+            $SanityTestBody .= $TestComponents{"ReturnRequirement"}."\n";
+        }
+        # postcondition for parameters
+        if($TestComponents{"PostCondition"}) {
+            $SanityTestBody .= $TestComponents{"PostCondition"}."\n";
+        }
+        if($TestComponents{"FinalCode"})
+        {
+            # $SanityTestBody .= "//final code\n";
+            $SanityTestBody .= $TestComponents{"FinalCode"}."\n";
+            $SanityTestBody .="------------------------------------------------------------------------------------------\n";
+#        $age=<>;
+        }
+        $SanityTestMain .= $SanityTestBody;
+        if($Finalization)
+        {
+            $SanityTestMain .= "\n//finalization\n";
+            $SanityTestMain .= $Finalization."\n";
+        }
+        if($Env_PostRequirements) {
+            $SanityTestMain .= $Env_PostRequirements."\n";
+        }
+        if(my $AddDefines = $Descriptor{"Defines"})
+        {
+            $AddDefines=~s/\n\s+/\n/g;
+            $SanityTest .= $AddDefines."\n";
+        }
+        # clear code syntax
+        $SanityTestMain = alignCode($SanityTestMain, "    ", 0);
+        @{$TestComponents{"Headers"}} = reverse(@{$TestComponents{"Headers"}});
+        if(keys(%ConstraintNum)>0)
+        {
+            if(getTestLang($Interface) eq "C++")
+            {
+                $TestComponents{"Headers"} = addHeaders(["iostream"], $TestComponents{"Headers"});
+                $AuxHeaders{"iostream"} = 1;
+            }
+            else
+            {
+                $TestComponents{"Headers"} = addHeaders(["stdio.h"], $TestComponents{"Headers"});
+                $AuxHeaders{"stdio.h"} = 1;
+            }
+        }
+        @{$TestComponents{"Headers"}} = (@Include_Preamble, @{$TestComponents{"Headers"}});
+
+        if(keys(%Include_Order))
+        {
+            if(grep {defined $Include_Order{$_}} @{$TestComponents{"Headers"}}) {
+                $TestComponents{"Headers"} = orderHeaders($TestComponents{"Headers"});
+            }
+        }
+
+        my ($Headers, $IncPaths) = prepareHeaders(@{$TestComponents{"Headers"}});
+
+        $Result{"Headers"} = [];
+        my $HList = "";
+        foreach my $Header (@{$Headers})
+        {
+            $HList .= "#include <".$Header.">\n";
+            push(@{$Result{"Headers"}}, $Header);
+            if($Header=~/\+\+(\.h|)\Z/) {
+                $UsedInterfaces{"__gxx_personality"} = 1;
+            }
+        }
+        $SanityTest .= $HList;
+
+        my %UsedNameSpaces = ();
+        foreach my $NameSpace (add_namespaces(\$CommonCode), add_namespaces(\$SanityTestMain)) {
+            $UsedNameSpaces{$NameSpace} = 1;
+        }
+        if(keys(%UsedNameSpaces))
+        {
+            $SanityTest .= "\n";
+            foreach my $NameSpace (sort {get_depth($a,"::")<=>get_depth($b,"::")} keys(%UsedNameSpaces)) {
+                $SanityTest .= "using namespace $NameSpace;\n";
+            }
+            $SanityTest .= "\n";
+        }
+        if($CommonCode)
+        {
+            $SanityTest .= "\n$CommonCode\n\n";
+            $Result{"Code"} = $CommonCode;
+        }
+        $SanityTestfullBody .= $SanityTestMain;
+        $SanityTest .= "int main(int argc, char *argv[])\n";
+        $SanityTest .= "{\n";
+        $SanityTest .= alignCode($OnetimeCode_Parsed{"Code"}, "    ", 0)."\n";
+        $Result{"main"} = correct_spaces($SanityTestfullBody);
+        $SanityTest .= $SanityTestfullBody;
+    }#End of for loop for run tests of same Interface
+
     $SanityTest.= "    return 0;\n";
     $SanityTest .= "}\n";
     $SanityTest = correct_spaces($SanityTest); # cleaning code
