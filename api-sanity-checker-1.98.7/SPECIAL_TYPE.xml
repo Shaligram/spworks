@@ -1,0 +1,109 @@
+<spec_type>
+    <kind>
+        /* Kind of the specialized type.
+        Select it from the following list:
+        normal
+        common_param
+        common_retval
+        env
+        common_env */
+    </kind>
+
+    <data_type>
+        /* Name of the corresponding real data type,
+        one per line. You can specify several data
+        types if kind is 'common_param' or
+        'common_retval', one per line. This section
+        is not used if kind is 'env' or
+        'common_env' */
+    </data_type>
+
+    <value>
+        /* Value for initialization (true, 1.0,
+        "string", ...) */
+    </value>
+
+    <pre_condition>
+        /* Precondition on associated function parameter.
+        Example: $0!=NULL */
+    </pre_condition>
+
+    <post_condition>
+        /* Postcondition on associated function return
+        value or parameter.
+        Example: $0!=NULL && $obj.style() == DotLine
+        */
+    </post_condition>
+
+    <init_code>
+        /* Code that should be invoked before function call.
+        Example: $0->start(); */
+    </init_code>
+
+    <final_code>
+        /* Code that should be invoked after function call.
+        Example: $0->end(); */
+    </final_code>
+
+    <global_code>
+        /* Declarations of auxiliary functions and global
+        variables, header includes */
+    </global_code>
+
+    <decl_code>
+        /* Code that will be pasted instead of parameter
+        automatic declaration. Example: char \$0[16]; */
+    </decl_code>
+
+    <associating>
+        <interfaces>
+            /* List of interfaces (mangled/symbol names in
+            C++) that will be associated with the
+            specialized type, one per line */
+        </interfaces>
+
+        <except>
+            /* List of interfaces (mangled/symbol names in
+            C++) that will not be associated with the
+            specialized type, one per line. This section
+            is used if kind is 'common_env',
+            'common_param' or 'common_return' */
+        </except>
+
+        <links>
+            /* Associations with the return value,
+            parameters or/and object, one per line:
+            param1
+            param2
+            ...
+            object
+            retval */
+        </links>
+
+        <param_name>
+            /* Associations with the parameters by name,
+            one per line:
+            param_name1
+            param_name2
+            param_name3
+            ...
+            */
+        </param_name>
+    </associating>
+
+    <associating>
+        /* Other associations */
+    </associating>
+
+    <name>
+        /* Name of the specialized type */
+    </name>
+
+    <libs>
+        /* External shared objects, one per line.
+        If spectype contains call of the functions from
+        some external shared objects then these objects
+        should be listed here. Corresponding external
+        header files should be included in global_code */
+    </libs>
+</spec_type>
