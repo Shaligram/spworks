@@ -1027,6 +1027,7 @@ sub readSpecTypes($)
             { # constraint==post_condition, support of <= 1.6 versions
                 $Attr{"PostCondition"} = parseTag(\$SpecType, "constraint");
             }
+            $Attr{"OnetimeCode"} = parseTag(\$SpecType, "one_time_code");
             $Attr{"InitCode"} = parseTag(\$SpecType, "init_code");
             $Attr{"DeclCode"} = parseTag(\$SpecType, "decl_code");
             $Attr{"FinalCode"} = parseTag(\$SpecType, "final_code");
@@ -9776,7 +9777,8 @@ sub initializeParameter(@)
         $Param_Init{"Headers"} = addHeaders($ParsedCode{"Headers"}, $Param_Init{"Headers"});
         $Param_Init{"Code"} .= $ParsedCode{"NewGlobalCode"};
         $DeclCode = $ParsedCode{"Code"};
-        $Param_Init{"Init"} .= "//decl code\n".$DeclCode."\n";
+# This part of code will not be invoked , comment out in apl.pl. Since external data type denegeration not working when not defined. */ 
+        #  $Param_Init{"Init"} .= "//decl code\n".$DeclCode."\n";
     }
     if($InitCode)
     {
@@ -11893,6 +11895,9 @@ sub get_env_conditions($$)
         $Conditions{"Env_CommonCode"} .= $GlobalCode."\n";
         $SpecCode{$SpecEnv_Id} = 1;
     }
+    if(my $OnetimeCode = $SpecType{$SpecEnv_Id}{"OnetimeCode"}) {
+        $Conditions{"OnetimeCode"} .= $OnetimeCode."\n";
+    }
     if(my $PreCondition = $SpecType{$SpecEnv_Id}{"PreCondition"}) {
         $Conditions{"Env_PreRequirements"} .= constraint_for_environment($Interface, "precondition", $PreCondition);
     }
@@ -11973,7 +11978,7 @@ sub generateTest($)
     my $Interface = $_[0];
     return () if(not $Interface);
     our $start =0; 
-    our $end=2;
+    our $end=10;
     my $SanityTestfullBody = ();
     my $TestPath = getTestPath($Interface);
     { # create stuff for building and running test
@@ -12003,7 +12008,7 @@ sub generateTest($)
     $Block_Param{$CurrentBlock}{"argv"} = get_TypeIdByName("char**");
     $Block_Variable{$CurrentBlock}{"argv"} = 1;
     
-    my ($CommonPreamble, $Preamble, $Finalization, $Env_CommonCode, $Env_PreRequirements, $Env_PostRequirements) = ();
+    my ($CommonPreamble, $Preamble, $Finalization, $Env_CommonCode, $Env_PreRequirements, $Env_PostRequirements, $One_timeCode) = ();
     foreach my $SpecEnv_Id (sort {int($a)<=>int($b)} (keys(%Common_SpecEnv)))
     { # common environments
         next if($Common_SpecType_Exceptions{$Interface}{$SpecEnv_Id});
@@ -12013,8 +12018,10 @@ sub generateTest($)
         $Env_CommonCode .= $Conditions{"Env_CommonCode"};
         $Env_PreRequirements .= $Conditions{"Env_PreRequirements"};# in the direct order
         $Env_PostRequirements = $Conditions{"Env_PostRequirements"}.$Env_PostRequirements;# in the backward order
+        $One_timeCode = $Conditions{"OnetimeCode"};
     }
     
+    my %OnetimeCode_Parsed = parseCode($One_timeCode, "Code");
     # parsing of common preamble code for using
     # created variables in the following test case
     my %CommonPreamble_Parsed = parseCode($CommonPreamble, "Code");
@@ -12144,7 +12151,7 @@ sub generateTest($)
             }
         }
         else {
-            $SanityTestBody .= $TestComponents{"Call"}."; //target call\n\n";
+            $SanityTestBody .="retVal=".$TestComponents{"Call"}."\n";
         }
     }
     elsif($CompleteSignature{$Interface}{"Destructor"}) {
@@ -12159,8 +12166,10 @@ sub generateTest($)
     }
     if($TestComponents{"FinalCode"})
     {
-        $SanityTestBody .= "//final code\n";
+    # $SanityTestBody .= "//final code\n";
         $SanityTestBody .= $TestComponents{"FinalCode"}."\n";
+        $SanityTestBody .="------------------------------------------------------------------------------------------\n";
+#        $age=<>;
     }
     $SanityTestMain .= $SanityTestBody;
     if($Finalization)
@@ -12235,6 +12244,7 @@ sub generateTest($)
     $SanityTestfullBody .= $SanityTestMain;
     $SanityTest .= "int main(int argc, char *argv[])\n";
     $SanityTest .= "{\n";
+    $SanityTest .= alignCode($OnetimeCode_Parsed{"Code"}, "    ", 0)."\n";
     $Result{"main"} = correct_spaces($SanityTestfullBody);
     $SanityTest .= $SanityTestfullBody;
 }

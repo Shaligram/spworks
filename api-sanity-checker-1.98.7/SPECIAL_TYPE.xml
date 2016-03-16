@@ -1,3 +1,4 @@
+<collection>
 <spec_type>
     <kind>
         /* Kind of the specialized type.
@@ -7,6 +8,7 @@
         common_retval
         env
         common_env */
+        common_param
     </kind>
 
     <data_type>
@@ -16,6 +18,9 @@
         'common_retval', one per line. This section
         is not used if kind is 'env' or
         'common_env' */
+        adk_module_handle_t
+        adk_interface_handle_t
+        adk_ethernet_encap_flow_handle_t
     </data_type>
 
     <value>
@@ -43,16 +48,19 @@
     <final_code>
         /* Code that should be invoked after function call.
         Example: $0->end(); */
+            if (retVal != ADK_SUCCESS) printf("Test case failed \n"); return  $retVal;
     </final_code>
 
     <global_code>
         /* Declarations of auxiliary functions and global
         variables, header includes */
+        adk_status_t retVal = ADK_SUCCESS;
     </global_code>
 
     <decl_code>
         /* Code that will be pasted instead of parameter
         automatic declaration. Example: char \$0[16]; */
+        a  /* This part of code will not be invoked , comment out in apl.pl. Since external data type denegeration not working when not defined. */ 
     </decl_code>
 
     <associating>
@@ -107,3 +115,41 @@
         header files should be included in global_code */
     </libs>
 </spec_type>
+
+
+<spec_type>
+    <kind>
+        /* Kind of the specialized type.
+        Select it from the following list:
+        normal
+        common_param
+        common_retval
+        env
+        common_env */
+        common_env
+    </kind>
+    <one_time_code>
+        /* Code that should be invoked before function call.
+        Example: $0->start(); */
+        adk_sys_conf_t sys_conf;
+        ADK_MEMSET(&sys_conf, 0x0, sizeof(sys_conf));
+        sys_conf.chipInstance = 1;
+        sys_conf.multiThread = FALSE;
+        sys_conf.logLevel = ADK_LOG_LEVEL_ERROR;
+        sys_conf.configFile_p = config;
+        retVal = adk_sys_init(&sys_conf, &sys_handle);
+        if (retVal != ADK_SUCCESS) {
+                  printf("Failed to init adk system\n");
+                  exit(1);
+        } else {
+                  printf("ADK software initialized. System handle: 0x%08x\n",(ncp_uint32_t) sys_handle);
+        }
+        retVal = adk_module_register(sys_handle,(ncp_uint8_t *) ADK_ETHERNET_MODULE_NAME, (adk_module_init_func_t) adk_ethernet_init,&module_handle_t);
+        if (retVal != ADK_SUCCESS) return(ADK_E_MODULE_NOT_REGISTERED);
+        ---------------------------------------------------------------------------------------
+
+
+    </one_time_code>
+</spec_type>
+
+</collection>
