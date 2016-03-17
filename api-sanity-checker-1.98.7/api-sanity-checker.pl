@@ -56,7 +56,7 @@ use File::Temp qw(tempdir);
 use File::Copy qw(copy);
 use Cwd qw(abs_path cwd realpath);
 use Config;
-
+use Data::Dumper qw(Dumper);
 my $TOOL_VERSION = "1.98.7";
 my $OSgroup = get_OSgroup();
 my $ORIG_DIR = cwd();
@@ -79,6 +79,9 @@ $RelativeDirectory, $TargetTitle, $TargetVersion, $StrictGen,
 $StrictBuild, $StrictRun, $Strict, $Debug, $UseCache, $NoInline, $UserLang,
 $OptimizeIncludes, $KeepInternal, $TargetCompiler, $GenerateAll,
 $InterfacesListPath);
+
+our %TotalEnumList = ();
+our @EnumList = ();
 
 my $CmdName = get_filename($0);
 my %OS_LibExt=(
@@ -6018,6 +6021,11 @@ sub add_VirtualSpecType(@)
     return %NewInit_Desc;
 }
 
+sub is_valid_enum_constant($)
+{
+    my $Constant = $_[0];
+    return $Constant!~/(unknown|max|invalid|null|err|none|(_|\A)(ms|win\d*|no)(_|\Z))/i;
+}
 sub is_valid_constant($)
 {
     my $Constant = $_[0];
@@ -8249,6 +8257,19 @@ sub getSomeEnumMember($)
     foreach my $MembPos (sort{int($a)<=>int($b)} keys(%{$Enum{"Memb"}})) {
         push(@Members, $Enum{"Memb"}{$MembPos}{"name"});
     }
+    if($TotalEnumList{"Countset"} == 0)
+    {
+        $TotalEnumList{"Count"} *=scalar(@Members);    
+        push(@EnumList, $EnumId);
+        push(@EnumList, 0);
+        push(@EnumList, 0);
+        push(@EnumList, scalar(@Members));
+        $loopend = $TotalEnumList{"Count"};
+        my $Tid = $Enum{"Tid"};
+        $TotalEnumList{"$Tid"} = 0; 
+        $EnumList[$#EnumList-1] =1;
+        $TotalEnumList{"enum"} = 1;
+    }
     if($RandomCode) 
     {
         @Members = mix_array(@Members);
@@ -8256,15 +8277,16 @@ sub getSomeEnumMember($)
     my @ValidMembers = ();
     foreach my $Member (@Members)
     {
-        #if(is_valid_constant($Member)) 
+        #    if(is_valid_enum_constant($EnumList[1])) 
         {
             push(@ValidMembers, $Member);
         }
     }
     my $MemberName = $Members[0];
-    #if($#ValidMembers>=0) 
+    if($#ValidMembers>=0) 
     {
-        $MemberName = $ValidMembers[$start];
+        my $Tid = $Enum{"Tid"};
+        $MemberName = $ValidMembers[$TotalEnumList{"$Tid"}];
     }
     if($Enum{"NameSpace"} and $MemberName
     and getSymLang($TestedInterface) eq "C++") {
@@ -11973,12 +11995,53 @@ sub esc_option($$)
     return "";
 }
 
+sub update_enumlist()
+{
+    my $READLOC =1;
+    my $STATE = 2;
+    my $MAXVALUE = 3;
+    my $array_size = $#EnumList +1;
+    my $state_sum =0;
+    my $Tid = 0;
+    
+    for( my $i=$array_size-4; $i >= 0; $i-=4)
+    {
+        if($EnumList[$i+$STATE] == 1)
+        {
+            $state_sum+=1;
+            $Tid = $EnumList[$i];
+            $EnumList[$i+$READLOC] +=1;
+            $TotalEnumList{"$Tid"} +=1;
+            if($EnumList[$i+$READLOC] >= $EnumList[$i+$MAXVALUE])
+            {
+                $EnumList[$i+$READLOC] = 0;
+                $TotalEnumList{"$Tid"} = 0;
+                $EnumList[$i-2] = 1;
+            }
+        }
+
+    }
+    if(($state_sum+1 == $#EnumList) and ($EnumList[5] == $EnumList[7]))
+    {
+        #Reset and increment constant by 1  
+        $EnumList[1] +=1;
+        for( my $i=4; $i < $array_size; $i+=3)
+        {
+            $Tid = $EnumList[$i];
+            $EnumList[$i+$STATE] = 0;
+            $EnumList[$i+$READLOC] = 0;
+            $TotalEnumList{"$Tid"} = 0;
+        }
+        $EnumList[$i+$STATE-3] = 1;
+    }
+#    $age=<>;
+}
 sub generateTest($)
 {
     my $Interface = $_[0];
     return () if(not $Interface);
     our $loopstart=0; 
-    our $loopend=10;
+    our $loopend=1;
     my $SanityTestfullBody = ();
     my $TestPath = getTestPath($Interface);
     { # create stuff for building and running test
@@ -11987,6 +12050,11 @@ sub generateTest($)
         }
         mkpath($TestPath);
     }
+    %TotalEnumList = ();
+    @EnumList = ();
+    $TotalEnumList{"Count"} = 1;
+    $TotalEnumList{"Countset"} = 0;
+    $TotalEnumList{"enum"} = 0;
     for( $loopstart=0; $loopstart<$loopend;$loopstart++)
     {
         # reset global state
@@ -12247,7 +12315,14 @@ sub generateTest($)
         $SanityTest .= alignCode($OnetimeCode_Parsed{"Code"}, "    ", 0)."\n";
         $Result{"main"} = correct_spaces($SanityTestfullBody);
         $SanityTest .= $SanityTestfullBody;
+        $TotalEnumList{"Countset"} = 1;
+    
+        if($TotalEnumList{"enum"} ==1)
+        {
+            update_enumlist();
+        }
     }#End of for loop for run tests of same Interface
+    print "$Interface for $loopend set  \n";
 
     $SanityTest.= "    return 0;\n";
     $SanityTest .= "}\n";
