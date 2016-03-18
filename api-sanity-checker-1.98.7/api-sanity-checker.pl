@@ -57,6 +57,7 @@ use File::Copy qw(copy);
 use Cwd qw(abs_path cwd realpath);
 use Config;
 use Data::Dumper qw(Dumper);
+use Data::Dump qw(dump);
 my $TOOL_VERSION = "1.98.7";
 my $OSgroup = get_OSgroup();
 my $ORIG_DIR = cwd();
@@ -5970,6 +5971,17 @@ sub add_VirtualSpecType(@)
             }
             elsif(isCharType($FoundationTypeName)
             and $TypeName=~/bool/i) {
+                if($TotalEnumList{"Countset"} == 0)
+                {
+                    $TotalEnumList{"Count"} *=2;
+                    push(@EnumList, $TypeId);
+                    push(@EnumList, 0);
+                    push(@EnumList, 0);
+                    push(@EnumList, 2);
+
+                    $TotalEnumList{"$TypeId"} = 0; 
+                    $TotalEnumList{"enum"} = 1;
+                }
                 $NewInit_Desc{"Value"} = vary_values([1, 0], \%Init_Desc);
             }
             else {
@@ -6066,7 +6078,8 @@ sub vary_values($$)
     }
     else
     { # standalone
-        return $ValuesArray[0];
+        my $Tid = $Init_Desc->{"TypeId"};
+        return $ValuesArray[$TotalEnumList{"$Tid"}];
     }
 }
 
@@ -8264,10 +8277,8 @@ sub getSomeEnumMember($)
         push(@EnumList, 0);
         push(@EnumList, 0);
         push(@EnumList, scalar(@Members));
-        $loopend = $TotalEnumList{"Count"};
         my $Tid = $Enum{"Tid"};
         $TotalEnumList{"$Tid"} = 0; 
-        $EnumList[$#EnumList-1] =1;
         $TotalEnumList{"enum"} = 1;
     }
     if($RandomCode) 
@@ -12016,15 +12027,16 @@ sub update_enumlist()
             {
                 $EnumList[$i+$READLOC] = 0;
                 $TotalEnumList{"$Tid"} = 0;
+                #set the STATE of ARRAY to Variable(1). except the first one
                 $EnumList[$i-2] = 1;
             }
         }
-
     }
     if(($state_sum+1 == $#EnumList) and ($EnumList[5] == $EnumList[7]))
     {
-        #Reset and increment constant by 1  
-        $EnumList[1] +=1;
+        #Reset and increment constant by 1 
+        $EnumList[1] +=1; #Increment Read Loc of Reference ARRAY(0) by 1 
+        #ARRAY(0) => TID(0)|READLOC(1)|STATE(2)|MAXVALUE(3) 
         for( my $i=4; $i < $array_size; $i+=3)
         {
             $Tid = $EnumList[$i];
@@ -12032,8 +12044,11 @@ sub update_enumlist()
             $EnumList[$i+$READLOC] = 0;
             $TotalEnumList{"$Tid"} = 0;
         }
-        $EnumList[$i+$STATE-3] = 1;
+        #   $EnumList[$i+$STATE-3] = 1;
     }
+    #set the STATE of First ARRAY to Constant(1).It should be always constant only the read location increases 
+    $EnumList[2] = 0;
+#    print dump(@EnumList);
 #    $age=<>;
 }
 sub generateTest($)
@@ -12041,7 +12056,7 @@ sub generateTest($)
     my $Interface = $_[0];
     return () if(not $Interface);
     our $loopstart=0; 
-    our $loopend=1;
+    our $loopend=0;
     my $SanityTestfullBody = ();
     my $TestPath = getTestPath($Interface);
     { # create stuff for building and running test
@@ -12055,7 +12070,7 @@ sub generateTest($)
     $TotalEnumList{"Count"} = 1;
     $TotalEnumList{"Countset"} = 0;
     $TotalEnumList{"enum"} = 0;
-    for( $loopstart=0; $loopstart<$loopend;$loopstart++)
+    do
     {
         # reset global state
         restore_state(());
@@ -12319,10 +12334,18 @@ sub generateTest($)
     
         if($TotalEnumList{"enum"} ==1)
         {
+            if($loopstart==0) 
+            {
+                $EnumList[$#EnumList-1] = 1;
+                $loopend = $TotalEnumList{"Count"};
+                # print "\n".dump(@EnumList)."\n";
+            }
             update_enumlist();
         }
-    }#End of for loop for run tests of same Interface
-    print "$Interface for $loopend set  \n";
+
+        $loopstart+=1;
+    }while($loopstart<$loopend); #End of for loop for run tests of same Interface
+    #print " $loopend cases for $Interface   \n";
 
     $SanityTest.= "    return 0;\n";
     $SanityTest .= "}\n";
