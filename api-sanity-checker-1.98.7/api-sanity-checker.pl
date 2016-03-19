@@ -5974,12 +5974,12 @@ sub add_VirtualSpecType(@)
                 if($TotalEnumList{"Countset"} == 0)
                 {
                     $TotalEnumList{"Count"} *=2;
-                    push(@EnumList, $TypeId);
+                    push(@EnumList, $ParamName);
                     push(@EnumList, 0);
                     push(@EnumList, 0);
                     push(@EnumList, 2);
 
-                    $TotalEnumList{"$TypeId"} = 0; 
+                    $TotalEnumList{"$ParamName"} = 0; 
                     $TotalEnumList{"enum"} = 1;
                 }
                 $NewInit_Desc{"Value"} = vary_values([1, 0], \%Init_Desc);
@@ -6078,7 +6078,7 @@ sub vary_values($$)
     }
     else
     { # standalone
-        my $Tid = $Init_Desc->{"TypeId"};
+        my $Tid = $Init_Desc->{"ParamName"};
         return $ValuesArray[$TotalEnumList{"$Tid"}];
     }
 }
@@ -10836,6 +10836,14 @@ sub highlight_code($$)
             }
         }
     }
+    foreach my $Num (keys(%Preprocessor))
+    {
+        my $Define = $Preprocessor{$Num};
+        $Code=~s!\@PREPROC_$Num\@!\@LT\@span\@SP\@class='prepr'\@GT\@$Define\@LT\@/span\@GT\@!g;
+    }
+    return $Code;
+    #TBD Dont know why Below code gets stuck for HTML file generation so returned from Here
+    ##FIX ME SHALIGRAM
     my %Strings_DQ = ();
     my $StrNum_DQ = 1;
     while($Code=~s/((L|)"[^"]*")/\@STR_DQ_$StrNum_DQ\@/)
@@ -12012,44 +12020,67 @@ sub update_enumlist()
     my $STATE = 2;
     my $MAXVALUE = 3;
     my $array_size = $#EnumList +1;
-    my $state_sum =0;
     my $Tid = 0;
+    my $value_of_5_element=777;
+    my $i=0;
     
-    for( my $i=$array_size-4; $i >= 0; $i-=4)
+    if($array_size/4==1) 
+    {
+        #Case when only one arrayin PRESENT 
+        $Tid = $EnumList[0];
+        $EnumList[$READLOC] +=1;
+        $TotalEnumList{"$Tid"} +=1;
+    }
+    #ARRAY(0)-, 0,0,0,0 returns array_size as 4 for 4 elements to ARRAY(n) for n+1 ARRAY list
+    #Start from the last array(n)
+    for( $i=$array_size-4; $i > 0; $i-=4)
     {
         if($EnumList[$i+$STATE] == 1)
         {
-            $state_sum+=1;
             $Tid = $EnumList[$i];
-            $EnumList[$i+$READLOC] +=1;
             $TotalEnumList{"$Tid"} +=1;
+            $EnumList[$i+$READLOC] +=1;
             if($EnumList[$i+$READLOC] >= $EnumList[$i+$MAXVALUE])
             {
+                $TotalEnumList{"Statesum"} +=1;
+                $value_of_5_element = $EnumList[5];
                 $EnumList[$i+$READLOC] = 0;
                 $TotalEnumList{"$Tid"} = 0;
                 #set the STATE of ARRAY to Variable(1). except the first one
-                $EnumList[$i-2] = 1;
+                $EnumList[$i-4+$STATE] = 1;
             }
         }
     }
-    if(($state_sum+1 == $#EnumList) and ($EnumList[5] == $EnumList[7]))
+    for( $i=4; $i < $array_size-4; $i+=4)
+    {
+        $EnumList[$i+$STATE] = 0;
+    }
+    #print "\nSTATE SUM $TotalEnumList{'Statesum'} ,$value_of_5_element, $EnumList[7]\n";
+    #print dump(@EnumList);
+    # $age=<>;
+#    print_after("",%TotalEnumList);
+    #If Value of Max Value present is equal to The READ LOC then need to reset the read loc to 0 and set the STATE OF previous array as 1
+    if(($TotalEnumList{"Statesum"}+1  >= $array_size/4) and ($value_of_5_element == $EnumList[7]) and ($EnumList[7]!=0))
     {
         #Reset and increment constant by 1 
+        $Tid = $EnumList[0];
+        $TotalEnumList{"$Tid"} +=1;
         $EnumList[1] +=1; #Increment Read Loc of Reference ARRAY(0) by 1 
         #ARRAY(0) => TID(0)|READLOC(1)|STATE(2)|MAXVALUE(3) 
-        for( my $i=4; $i < $array_size; $i+=3)
+        for( $i=4; $i < $array_size; $i+=4)
         {
-            $Tid = $EnumList[$i];
-            $EnumList[$i+$STATE] = 0;
             $EnumList[$i+$READLOC] = 0;
+            $Tid = $EnumList[$i];
             $TotalEnumList{"$Tid"} = 0;
         }
-        #   $EnumList[$i+$STATE-3] = 1;
+        #Set last ARRAY as variable        
+         $EnumList[$i+$STATE-4] = 1;
     }
     #set the STATE of First ARRAY to Constant(1).It should be always constant only the read location increases 
     $EnumList[2] = 0;
-#    print dump(@EnumList);
-#    $age=<>;
+    #print "\t\t\t\t\tFinal ".dump(@EnumList);
+#    print_after("",%TotalEnumList);
+    # $age=<>;
 }
 sub generateTest($)
 {
@@ -12332,20 +12363,24 @@ sub generateTest($)
         $SanityTest .= $SanityTestfullBody;
         $TotalEnumList{"Countset"} = 1;
     
-        if($TotalEnumList{"enum"} ==1)
+        #Set to 0 Below statement added for debugging one loop
+        if($TotalEnumList{"enum"} == 1)
         {
             if($loopstart==0) 
             {
+                #print "\n".dump(@EnumList)."\n";
                 $EnumList[$#EnumList-1] = 1;
                 $loopend = $TotalEnumList{"Count"};
-                # print "\n".dump(@EnumList)."\n";
             }
-            update_enumlist();
+            # if($loopstart<$loopend-1)
+            {
+                update_enumlist();
+            }
         }
 
         $loopstart+=1;
-    }while($loopstart<$loopend); #End of for loop for run tests of same Interface
-    #print " $loopend cases for $Interface   \n";
+    } while($loopstart<$loopend); #End of for loop for run tests of same Interface
+    printf("%3d Case for $Interface\n", $loopend+1);
 
     $SanityTest.= "    return 0;\n";
     $SanityTest .= "}\n";
