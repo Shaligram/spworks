@@ -5781,15 +5781,33 @@ sub add_VirtualSpecType(@)
                 if($PointerLevel==0)
                 {
                     if($Init_Desc{"RetVal"}
-                    and $CurrentBlock=~/read/i) {
+                            and $CurrentBlock=~/read/i) {
                         $NewInit_Desc{"Value"} = "0";
                     }
                     elsif($Init_Desc{"RetVal"}
-                    and $TypeName=~/err/i) {
+                            and $TypeName=~/err/i) {
                         $NewInit_Desc{"Value"} = "1";
+                    }
+                    elsif($ParamName=~/ip_ad3dr|next3_hop/i) {
+                        $NewInit_Desc{"Value"} = vary_values([0,"0xffffff",1, "0xc8c8c801"], \%Init_Desc);
+                    }
+                    elsif($ParamName=~/vlan/i) {
+                        $NewInit_Desc{"Value"} = vary_values([0,1,"0xfff","0x1fff"], \%Init_Desc);
+                    }
+                    elsif($ParamName=~/proto/i) {
+                        $NewInit_Desc{"Value"} = vary_values(["0x86DD","0x800","0"], \%Init_Desc);
+                    }
+                    elsif($ParamName=~/bridge/i) {
+                        $NewInit_Desc{"Value"} = vary_values([0,1], \%Init_Desc);
+                    }
+                    elsif($ParamName=~/bridge/i) {
+                        $NewInit_Desc{"Value"} = vary_values([0,1], \%Init_Desc);
                     }
                     elsif($ParamName=~/socket|block/i) {
                         $NewInit_Desc{"Value"} = vary_values(["0"], \%Init_Desc);
+                    }
+                    elsif($ParamName=~/next_hop|ip_addr/i) {
+                        $NewInit_Desc{"Value"} = 0xc8c8c809;
                     }
                     elsif($ParamName=~/freq/i) {
                         $NewInit_Desc{"Value"} = vary_values(["50"], \%Init_Desc);
@@ -5801,18 +5819,18 @@ sub add_VirtualSpecType(@)
                         $NewInit_Desc{"Value"} = vary_values(["0", "1"], \%Init_Desc);
                     }
                     elsif($ParamName=~/year/i
-                    or ($ParamName eq "y" and $I_ShortName=~/date/i)) {
+                            or ($ParamName eq "y" and $I_ShortName=~/date/i)) {
                         $NewInit_Desc{"Value"} = vary_values(["2009", "2010"], \%Init_Desc);
                     }
                     elsif($ParamName eq "sa_family"
-                    and get_TypeName($Init_Desc{"OuterType_Id"}) eq "struct sockaddr") {
+                            and get_TypeName($Init_Desc{"OuterType_Id"}) eq "struct sockaddr") {
                         $NewInit_Desc{"Value"} = vary_values(["AF_INET", "AF_INET6"], \%Init_Desc);
                     }
                     elsif($ParamName=~/day/i or ($ParamName eq "d" and $I_ShortName=~/date/i)) {
                         $NewInit_Desc{"Value"} = vary_values(["30", "17"], \%Init_Desc);
                     }
                     elsif($ParamName=~/month/i
-                    or ($ParamName eq "m" and $I_ShortName=~/date/i)) {
+                            or ($ParamName eq "m" and $I_ShortName=~/date/i)) {
                         $NewInit_Desc{"Value"} = vary_values(["11", "10"], \%Init_Desc);
                     }
                     elsif($ParamName=~/\Ac\Z/i and $I_ShortName=~/char/i) {
@@ -5829,7 +5847,7 @@ sub add_VirtualSpecType(@)
                         $NewInit_Desc{"Value"} = vary_values(["128"], \%Init_Desc);
                     }
                     elsif($ParamName=~/size|len|count/i
-                    and $I_ShortName=~/char|string/i) {
+                            and $I_ShortName=~/char|string/i) {
                         $NewInit_Desc{"Value"} = vary_values(["7"], \%Init_Desc);
                     }
                     elsif($ParamName=~/size|len|capacity|count|max|(\A(n|l|s|c)_)/i) {
@@ -5839,7 +5857,7 @@ sub add_VirtualSpecType(@)
                         $NewInit_Desc{"Value"} = vary_values([$HANGED_EXECUTION_TIME], \%Init_Desc);
                     }
                     elsif($ParamName=~/time/i
-                    or ($ParamName=~/len/i and $ParamName!~/error/i)) {
+                            or ($ParamName=~/len/i and $ParamName!~/error/i)) {
                         $NewInit_Desc{"Value"} = vary_values(["1", "0"], \%Init_Desc);
                     }
                     elsif($ParamName=~/depth/i) {
@@ -5849,7 +5867,7 @@ sub add_VirtualSpecType(@)
                         $NewInit_Desc{"Value"} = vary_values(["0", "1"], \%Init_Desc);
                     }
                     elsif($TypeName=~/(count|size)_t/i
-                    and $ParamName=~/items/) {
+                            and $ParamName=~/items/) {
                         $NewInit_Desc{"Value"} = vary_values([$DEFAULT_ARRAY_AMOUNT], \%Init_Desc);
                     }
                     elsif($ParamName=~/exists|start/i) {
@@ -5859,9 +5877,9 @@ sub add_VirtualSpecType(@)
                         $NewInit_Desc{"Value"} = vary_values(["1", "0"], \%Init_Desc);
                     }
                     elsif($ParamName=~/\A(n|l|s|c)[0-9_]*\Z/i
-                    # gsl_vector_complex_float_alloc (size_t const n)
-                    # gsl_matrix_complex_float_alloc (size_t const n1, size_t const n2)
-                    or (is_alloc_func($I_ShortName) and $ParamName=~/(num|len)[0-9_]*/i))
+                        # gsl_vector_complex_float_alloc (size_t const n)
+                        # gsl_matrix_complex_float_alloc (size_t const n1, size_t const n2)
+                            or (is_alloc_func($I_ShortName) and $ParamName=~/(num|len)[0-9_]*/i))
                     {
                         if($I_ShortName=~/column/) {
                             $NewInit_Desc{"Value"} = vary_values(["0"], \%Init_Desc);
@@ -5871,11 +5889,11 @@ sub add_VirtualSpecType(@)
                         }
                     }
                     elsif($Init_Desc{"OuterType_Type"} eq "Array"
-                    and $Init_Desc{"Index"} ne "") {
+                            and $Init_Desc{"Index"} ne "") {
                         $NewInit_Desc{"Value"} = vary_values([$Init_Desc{"Index"}], \%Init_Desc);
                     }
                     elsif(($ParamName=~/index|from|pos|field|line|column|row/i and $ParamName!~/[a-z][a-rt-z]s\Z/i)
-                    or $ParamName=~/\A(i|j|k|icol)\Z/i)
+                            or $ParamName=~/\A(i|j|k|icol)\Z/i)
                     { # gsl_vector_complex_float_get (gsl_vector_complex_float const* v, size_t const i)
                         if($Init_Desc{"OuterType_Type"} eq "Array") {
                             $NewInit_Desc{"Value"} = vary_values([$Init_Desc{"Index"}], \%Init_Desc);
@@ -5897,22 +5915,22 @@ sub add_VirtualSpecType(@)
                         $NewInit_Desc{"Value"} = vary_values(["1", "0"], \%Init_Desc);
                     }
                     elsif($ParamName=~/\A(w|width)\d*\Z/i
-                    and $I_ShortName=~/display/i) {
+                            and $I_ShortName=~/display/i) {
                         $NewInit_Desc{"Value"} = vary_values(["640"], \%Init_Desc);
                     }
                     elsif($ParamName=~/\A(h|height)\d*\Z/i
-                    and $I_ShortName=~/display/i) {
+                            and $I_ShortName=~/display/i) {
                         $NewInit_Desc{"Value"} = vary_values(["480"], \%Init_Desc);
                     }
                     elsif($ParamName=~/width|height/i
-                    or $ParamName=~/\A(x|y|z|w|h)\d*\Z/i) {
+                            or $ParamName=~/\A(x|y|z|w|h)\d*\Z/i) {
                         $NewInit_Desc{"Value"} = vary_values([8 * getIntrinsicValue($FoundationTypeName)], \%Init_Desc);
                     }
                     elsif($ParamName=~/offset/i) {
                         $NewInit_Desc{"Value"} = vary_values(["8", "16"], \%Init_Desc);
                     }
                     elsif($ParamName=~/stride|step|spacing|iter|interval|move/i
-                    or $ParamName=~/\A(to)\Z/) {
+                            or $ParamName=~/\A(to)\Z/) {
                         $NewInit_Desc{"Value"} = vary_values(["1"], \%Init_Desc);
                     }
                     elsif($ParamName=~/channels|frames/i and $I_ShortName=~/\Asnd_/i)
@@ -5933,13 +5951,13 @@ sub add_VirtualSpecType(@)
                         $FuncNames{"open"} = 1;
                     }
                     elsif(($TypeName=~/enum/i or $ParamName=~/message_type/i)
-                    and my $EnumConstant = selectConstant($TypeName, $ParamName, $Interface))
+                            and my $EnumConstant = selectConstant($TypeName, $ParamName, $Interface))
                     { # or ($TypeName eq "int" and $ParamName=~/\Amode|type\Z/i and $I_ShortName=~/\Asnd_/i) or $ParamName=~/mask/
                         $NewInit_Desc{"Value"} = vary_values([$EnumConstant], \%Init_Desc);
                         $NewInit_Desc{"Headers"} = addHeaders([$Constants{$EnumConstant}{"Header"}], $NewInit_Desc{"Headers"});
                     }
                     elsif($TypeName=~/enum/i
-                    or $ParamName=~/mode|type|flag|option/i) {
+                            or $ParamName=~/mode|type|flag|option/i) {
                         $NewInit_Desc{"Value"} = vary_values(["0"], \%Init_Desc);
                     }
                     elsif($ParamName=~/mask|alloc/i) {
@@ -5952,13 +5970,13 @@ sub add_VirtualSpecType(@)
                         $NewInit_Desc{"Value"} = vary_values(["0"], \%Init_Desc);
                     }
                     elsif($ParamName=~/key/i
-                    and $I_ShortName=~/\A[_]*X/)
+                            and $I_ShortName=~/\A[_]*X/)
                     { #X11
                         $NewInit_Desc{"Value"} = vary_values(["9"], \%Init_Desc);
                     }
                     elsif($ParamName=~/\Ap\d+\Z/
-                    and $Init_Desc{"ParamPos"}==$Init_Desc{"MaxParamPos"}
-                    and $I_ShortName=~/create|intern|privat/i) {
+                            and $Init_Desc{"ParamPos"}==$Init_Desc{"MaxParamPos"}
+                            and $I_ShortName=~/create|intern|privat/i) {
                         $NewInit_Desc{"Value"} = vary_values(["0"], \%Init_Desc);
                     }
                     elsif($TypeName=~/size/i) {
@@ -5971,26 +5989,36 @@ sub add_VirtualSpecType(@)
                 else {
                     $NewInit_Desc{"Value"} = "0";
                 }
+                $NewInit_Desc{"ValueTypeId"} = ($PointerLevel==0)?$TypeId:$FoundationTypeId;
             }
-            elsif(isCharType($FoundationTypeName)
-            and $TypeName=~/bool/i) {
-                if($TotalEnumList{"Countset"} == 0)
+            elsif(isCharType($FoundationTypeName))
+            {
+                if($TypeName=~/bool/i) 
                 {
-                    $TotalEnumList{"Count"} *=2;
-                    push(@EnumList, $ParamName);
-                    push(@EnumList, 0);
-                    push(@EnumList, 0);
-                    push(@EnumList, 2);
-
-                    $TotalEnumList{"$ParamName"} = 0; 
-                    $TotalEnumList{"enum"} = 1;
+                    $NewInit_Desc{"Value"} = vary_values([1, 0], \%Init_Desc);
                 }
-                $NewInit_Desc{"Value"} = vary_values([1, 0], \%Init_Desc);
+                elsif($TypeName=~/bridge/i) 
+                {
+                    $NewInit_Desc{"Value"} = vary_values([0,1,16], \%Init_Desc);
+                }
+                elsif($TypeName=~/priority/i) 
+                {
+                    $NewInit_Desc{"Value"} = vary_values([0,1,2,3,4,5,6,7,8], \%Init_Desc);
+                }
+                elsif($TypeName=~/dscp/i) 
+                {
+                    $NewInit_Desc{"Value"} = vary_values([0,1], \%Init_Desc);
+                }
+                elsif($TypeName=~/queue/i) 
+                {
+                    $NewInit_Desc{"Value"} = vary_values([0,1,2,3,4,5,6,7,8], \%Init_Desc);
+                }
+                else
+                {
+                    $NewInit_Desc{"Value"} = vary_values([getIntrinsicValue($FoundationTypeName)], \%Init_Desc);
+                }
+                $NewInit_Desc{"ValueTypeId"} = ($PointerLevel==0)?$TypeId:$FoundationTypeId;
             }
-            else {
-                $NewInit_Desc{"Value"} = vary_values([getIntrinsicValue($FoundationTypeName)], \%Init_Desc);
-            }
-            $NewInit_Desc{"ValueTypeId"} = ($PointerLevel==0)?$TypeId:$FoundationTypeId;
         }
         elsif($FoundationTypeType eq "Enum")
         {
@@ -6036,6 +6064,22 @@ sub add_VirtualSpecType(@)
     return %NewInit_Desc;
 }
 
+sub push_in_list($$)
+{
+    my $ParamName = $_[0];
+    my $Maxparam = $_[1];
+    if($TotalEnumList{"Countset"} == 0)
+    {
+        $TotalEnumList{"Count"} *=$Maxparam;
+        push(@EnumList, $ParamName);
+        push(@EnumList, 0);
+        push(@EnumList, 0);
+        push(@EnumList, $Maxparam);
+
+        $TotalEnumList{"$ParamName"} = 0; 
+        $TotalEnumList{"enum"} = 1;
+    }
+}
 sub is_valid_enum_constant($)
 {
     my $Constant = $_[0];
@@ -6081,6 +6125,7 @@ sub vary_values($$)
     }
     else
     { # standalone
+        push_in_list($Init_Desc->{"ParamName"}, scalar(@ValuesArray));
         my $Tid = $Init_Desc->{"ParamName"};
         return $ValuesArray[$TotalEnumList{"$Tid"}];
     }
@@ -12384,6 +12429,7 @@ sub generateTest($)
         $loopstart+=1;
     } while($loopstart<$loopend); #End of for loop for run tests of same Interface
     printf("%3d Case for $Interface\n", $loopend+1);
+    $Result{"perInterfacecase"} = $loopend+1;
 
     $SanityTest.= "    return 0;\n";
     $SanityTest .= "}\n";
@@ -13612,6 +13658,7 @@ sub generateTests()
     else
     { # standalone
         my $Test_Num = 0;
+        my $Test_Num_perABI = 0;
         if(keys(%LibGroups))
         {
             foreach my $Interface (keys(%TargetInterfaces))
@@ -13639,10 +13686,12 @@ sub generateTests()
                     exitStatus("Error", "can't generate test for $Interface");
                 }
             }
+            $Test_Num_perABI += $Result{"perInterfacecase"};
             $Test_Num += 1;
         }
         write_scenario();
         print "\r".get_one_step_title($All_Count, $All_Count, "generating tests", $ResultCounter{"Gen"}{"Success"}, $ResultCounter{"Gen"}{"Fail"})."\n";
+        print "\nTOTAL UNIT TEST API CALLS GENERATED: $Test_Num_perABI\n";
         restore_state(());
     }
     close(FAIL_LIST);
