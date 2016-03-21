@@ -1,0 +1,126 @@
+creating ABI dump ...
+cache ABI dump
+generating tests: 0/118 [0.00%], success/fail: 0/0      1 Case for adk_ethernet_add_port_to_bridge
+generating tests: 1/118 [0.85%], success/fail: 1/0      1 Case for adk_ethernet_aggr_interface_add
+generating tests: 2/118 [1.69%], success/fail: 2/0      1 Case for adk_ethernet_aggr_interface_create
+generating tests: 3/118 [2.54%], success/fail: 3/0      1 Case for adk_ethernet_aggr_interface_delete
+generating tests: 4/118 [3.39%], success/fail: 4/0      1 Case for adk_ethernet_aggr_interface_rem
+generating tests: 5/118 [4.24%], success/fail: 5/0      1 Case for adk_ethernet_arp_entry_add
+generating tests: 6/118 [5.08%], success/fail: 6/0      1 Case for adk_ethernet_arp_entry_rem
+generating tests: 7/118 [5.93%], success/fail: 7/0      5 Case for adk_ethernet_arp_entry_update
+generating tests: 8/118 [6.78%], success/fail: 8/0      1 Case for adk_ethernet_arp_resolved_buffer_discard
+generating tests: 9/118 [7.63%], success/fail: 9/0      1 Case for adk_ethernet_arp_resolved_buffer_flush
+generating tests: 10/118 [8.47%], success/fail: 10/0     15 Case for adk_ethernet_association_add
+generating tests: 11/118 [9.32%], success/fail: 11/0      1 Case for adk_ethernet_association_del
+generating tests: 12/118 [10.17%], success/fail: 12/0      1 Case for adk_ethernet_autoneg_force
+generating tests: 13/118 [11.02%], success/fail: 13/0      1 Case for adk_ethernet_bridge_create
+generating tests: 14/118 [11.86%], success/fail: 14/0      1 Case for adk_ethernet_bridge_delete
+generating tests: 15/118 [12.71%], success/fail: 15/0      1 Case for adk_ethernet_bridge_interface_create
+generating tests: 16/118 [13.56%], success/fail: 16/0      1 Case for adk_ethernet_bridge_interface_delete
+generating tests: 17/118 [14.41%], success/fail: 17/0      1 Case for adk_ethernet_bridge_interface_modify
+generating tests: 18/118 [15.25%], success/fail: 18/0      1 Case for adk_ethernet_config_default_vlan
+generating tests: 19/118 [16.10%], success/fail: 19/0      1 Case for adk_ethernet_dscp_based_qos_policy_rem
+generating tests: 20/118 [16.95%], success/fail: 20/0      1 Case for adk_ethernet_dscp_based_qos_policy_set
+generating tests: 21/118 [17.80%], success/fail: 21/0      1 Case for adk_ethernet_dscp_p_bits_map_add
+generating tests: 22/118 [18.64%], success/fail: 22/0      1 Case for adk_ethernet_dscp_p_bits_map_del
+generating tests: 23/118 [19.49%], success/fail: 23/0      1 Case for adk_ethernet_dscp_remarking_disable
+generating tests: 24/118 [20.34%], success/fail: 24/0      1 Case for adk_ethernet_dscp_remarking_enable
+generating tests: 25/118 [21.19%], success/fail: 25/0      5 Case for adk_ethernet_egress_flow_create
+generating tests: 26/118 [22.03%], success/fail: 26/0      1 Case for adk_ethernet_egress_flow_delete
+generating tests: 27/118 [22.88%], success/fail: 27/0      5 Case for adk_ethernet_egress_vlan_filter_add
+generating tests: 28/118 [23.73%], success/fail: 28/0      1 Case for adk_ethernet_egress_vlan_filter_del
+generating tests: 29/118 [24.58%], success/fail: 29/0      1 Case for adk_ethernet_encap_flow_create
+generating tests: 30/118 [25.42%], success/fail: 30/0      1 Case for adk_ethernet_encap_flow_delete
+generating tests: 31/118 [26.27%], success/fail: 31/0      1 Case for adk_ethernet_encap_flow_modify
+generating tests: 32/118 [27.12%], success/fail: 32/0      5 Case for adk_ethernet_encap_flow_nd_status_update
+generating tests: 33/118 [27.97%], success/fail: 33/0      1 Case for adk_ethernet_ethertype_based_qos_policy_rem
+generating tests: 34/118 [28.81%], success/fail: 34/0      1 Case for adk_ethernet_ethertype_based_qos_policy_set
+generating tests: 35/118 [29.66%], success/fail: 35/0      1 Case for adk_ethernet_ethertype_p_bits_map_add
+generating tests: 36/118 [30.51%], success/fail: 36/0      1 Case for adk_ethernet_ethertype_p_bits_map_del
+generating tests: 37/118 [31.36%], success/fail: 37/0    106 Case for adk_ethernet_exception_configure
+generating tests: 38/118 [32.20%], success/fail: 38/0     15 Case for adk_ethernet_flow_control
+generating tests: 39/118 [33.05%], success/fail: 39/0      5 Case for adk_ethernet_flow_filter
+generating tests: 40/118 [33.90%], success/fail: 40/0      1 Case for adk_ethernet_flow_id_get
+generating tests: 41/118 [34.75%], success/fail: 41/0      1 Case for adk_ethernet_get_arp_entries
+generating tests: 42/118 [35.59%], success/fail: 42/0      1 Case for adk_ethernet_get_fdb_entries
+generating tests: 43/118 [36.44%], success/fail: 43/0      1 Case for adk_ethernet_global_statistics_get
+generating tests: 44/118 [37.29%], success/fail: 44/0      1 Case for adk_ethernet_global_stats_print
+generating tests: 45/118 [38.14%], success/fail: 45/0      1 Case for adk_ethernet_if_stats_print
+generating tests: 46/118 [38.98%], success/fail: 46/0     15 Case for adk_ethernet_ingress_flow_create
+generating tests: 47/118 [39.83%], success/fail: 47/0      1 Case for adk_ethernet_ingress_flow_delete
+generating tests: 48/118 [40.68%], success/fail: 48/0     15 Case for adk_ethernet_ingress_flow_modify
+generating tests: 49/118 [41.53%], success/fail: 49/0      1 Case for adk_ethernet_init
+generating tests: 50/118 [42.37%], success/fail: 50/0      3 Case for adk_ethernet_interface_autoneg
+generating tests: 51/118 [43.22%], success/fail: 51/0      6 Case for adk_ethernet_interface_config_add
+generating tests: 52/118 [44.07%], success/fail: 52/0      6 Case for adk_ethernet_interface_config_rem
+generating tests: 53/118 [44.92%], success/fail: 53/0    1681 Case for adk_ethernet_interface_create
+generating tests: 54/118 [45.76%], success/fail: 54/0      1 Case for adk_ethernet_interface_delete
+generating tests: 55/118 [46.61%], success/fail: 55/0      5 Case for adk_ethernet_interface_duplex
+generating tests: 56/118 [47.46%], success/fail: 56/0      1 Case for adk_ethernet_interface_handle_get
+generating tests: 57/118 [48.31%], success/fail: 57/0      1 Case for adk_ethernet_interface_id_get
+generating tests: 58/118 [49.15%], success/fail: 58/0      3 Case for adk_ethernet_interface_rx
+generating tests: 59/118 [50.00%], success/fail: 59/0      1 Case for adk_ethernet_interface_statistics_get
+generating tests: 60/118 [50.85%], success/fail: 60/0      3 Case for adk_ethernet_interface_tx
+generating tests: 61/118 [51.69%], success/fail: 61/0      6 Case for adk_ethernet_l3_shaping_mode_config
+generating tests: 62/118 [52.54%], success/fail: 62/0      1 Case for adk_ethernet_log_disable
+generating tests: 63/118 [53.39%], success/fail: 63/0      1 Case for adk_ethernet_log_enable
+generating tests: 64/118 [54.24%], success/fail: 64/0      1 Case for adk_ethernet_log_level_set
+generating tests: 65/118 [55.08%], success/fail: 65/0     45 Case for adk_ethernet_mac_channel_get
+generating tests: 66/118 [55.93%], success/fail: 66/0      1 Case for adk_ethernet_mac_table_aging_time_config
+generating tests: 67/118 [56.78%], success/fail: 67/0      1 Case for adk_ethernet_mac_table_entries_flush
+generating tests: 68/118 [57.63%], success/fail: 68/0      1 Case for adk_ethernet_mtu_set
+generating tests: 69/118 [58.47%], success/fail: 69/0      3 Case for adk_ethernet_multicast_enable
+generating tests: 70/118 [59.32%], success/fail: 70/0      1 Case for adk_ethernet_multicast_group_create
+generating tests: 71/118 [60.17%], success/fail: 71/0      1 Case for adk_ethernet_multicast_group_delete
+generating tests: 72/118 [61.02%], success/fail: 72/0      1 Case for adk_ethernet_multicast_member_add
+generating tests: 73/118 [61.86%], success/fail: 73/0      1 Case for adk_ethernet_multicast_member_remove
+generating tests: 74/118 [62.71%], success/fail: 74/0      1 Case for adk_ethernet_nonswitched_l2_qos_default_policy_config
+generating tests: 75/118 [63.56%], success/fail: 75/0      3 Case for adk_ethernet_nonswitched_l2_qos_policy_rem
+generating tests: 76/118 [64.41%], success/fail: 76/0      3 Case for adk_ethernet_nonswitched_l2_qos_policy_set
+generating tests: 77/118 [65.25%], success/fail: 77/0      8 Case for adk_ethernet_output_rate_set
+generating tests: 78/118 [66.10%], success/fail: 78/0      1 Case for adk_ethernet_pcp_based_qos_policy_rem
+generating tests: 79/118 [66.95%], success/fail: 79/0      1 Case for adk_ethernet_pcp_based_qos_policy_set
+generating tests: 80/118 [67.80%], success/fail: 80/0      3 Case for adk_ethernet_port_loopback
+generating tests: 81/118 [68.64%], success/fail: 81/0      1 Case for adk_ethernet_port_number_get
+generating tests: 82/118 [69.49%], success/fail: 82/0      3 Case for adk_ethernet_port_statistics_get
+generating tests: 83/118 [70.34%], success/fail: 83/0      1 Case for adk_ethernet_port_stats_print
+generating tests: 84/118 [71.19%], success/fail: 84/0    897 Case for adk_ethernet_port_status_get
+generating tests: 85/118 [72.03%], success/fail: 85/0      1 Case for adk_ethernet_port_status_print
+generating tests: 86/118 [72.88%], success/fail: 86/0      5 Case for adk_ethernet_priority_map
+generating tests: 87/118 [73.73%], success/fail: 87/0      3 Case for adk_ethernet_priority_map_add
+generating tests: 88/118 [74.58%], success/fail: 88/0      3 Case for adk_ethernet_priority_map_del
+generating tests: 89/118 [75.42%], success/fail: 89/0      3 Case for adk_ethernet_priority_override_config
+generating tests: 90/118 [76.27%], success/fail: 90/0      3 Case for adk_ethernet_priority_tagged_encap_config
+generating tests: 91/118 [77.12%], success/fail: 91/0      3 Case for adk_ethernet_promiscuous_mode
+generating tests: 92/118 [77.97%], success/fail: 92/0      1 Case for adk_ethernet_ptp_statistics_get
+generating tests: 93/118 [78.81%], success/fail: 93/0      1 Case for adk_ethernet_qos_dedicated_queue_config
+generating tests: 94/118 [79.66%], success/fail: 94/0      6 Case for adk_ethernet_qos_mode_config
+generating tests: 95/118 [80.51%], success/fail: 95/0      1 Case for adk_ethernet_recv_mac_add
+generating tests: 96/118 [81.36%], success/fail: 96/0      1 Case for adk_ethernet_recv_mac_del
+generating tests: 97/118 [82.20%], success/fail: 97/0      1 Case for adk_ethernet_remove_port_from_bridge
+generating tests: 98/118 [83.05%], success/fail: 98/0      3 Case for adk_ethernet_send_task_param
+generating tests: 99/118 [83.90%], success/fail: 99/0      1 Case for adk_ethernet_service_function_update
+generating tests: 100/118 [84.75%], success/fail: 100/0      1 Case for adk_ethernet_shutdown
+generating tests: 101/118 [85.59%], success/fail: 101/0      1 Case for adk_ethernet_static_mac_entry_add
+generating tests: 102/118 [86.44%], success/fail: 102/0      3 Case for adk_ethernet_stp
+generating tests: 103/118 [87.29%], success/fail: 103/0      7 Case for adk_ethernet_stp_state
+generating tests: 104/118 [88.14%], success/fail: 104/0      1 Case for adk_ethernet_switch_virtual_if_create
+generating tests: 105/118 [88.98%], success/fail: 105/0      1 Case for adk_ethernet_switch_virtual_if_delete
+generating tests: 106/118 [89.83%], success/fail: 106/0      3 Case for adk_ethernet_switching_enable
+generating tests: 107/118 [90.68%], success/fail: 107/0      1 Case for adk_ethernet_time_stamp_get
+generating tests: 108/118 [91.53%], success/fail: 108/0      7 Case for adk_ethernet_traffic_mirroring_config
+generating tests: 109/118 [92.37%], success/fail: 109/0      3 Case for adk_ethernet_vlan_awareness_config
+generating tests: 110/118 [93.22%], success/fail: 110/0      1 Case for adk_ethernet_vlan_based_qos_policy_rem
+generating tests: 111/118 [94.07%], success/fail: 111/0      1 Case for adk_ethernet_vlan_based_qos_policy_set
+generating tests: 112/118 [94.92%], success/fail: 112/0      1 Case for adk_ethernet_vlan_eth_type_add
+generating tests: 113/118 [95.76%], success/fail: 113/0      1 Case for adk_ethernet_vlan_eth_type_del
+generating tests: 114/118 [96.61%], success/fail: 114/0      1 Case for adk_ethernet_vlan_id_add
+generating tests: 115/118 [97.46%], success/fail: 115/0      1 Case for adk_ethernet_vlan_id_del
+generating tests: 116/118 [98.31%], success/fail: 116/0      1 Case for adk_ethernet_vlan_sub_if_create
+generating tests: 117/118 [99.15%], success/fail: 117/0      1 Case for adk_ethernet_vlan_sub_if_delete
+generating tests: 118/118 [100.00%], success/fail: 118/0    
+
+1. see generated test suite in the directory 'tests/NAME/0.1/'
+2. for viewing tests use 'tests/NAME/0.1/view_tests.html'
+3. use -build option for building tests
+
