@@ -5051,7 +5051,10 @@ sub isBuffer($$$)
     # exceptions
     # bmp_read24 (uintptr_t addr)
     # bmp_write24 (uintptr_t addr, int c)
-    return 1 if($PLevel==0 and $ParamName=~/addr/i and isIntegerType($FTypeName));
+    #TBD FIX ME Shaligram
+    #Below statement generates a malloc statment for the function parameter if ParamName as string as "*addr*". It conflicts with ipv4_addr_struct so commented
+    #out
+#    return 1 if($PLevel==0 and $ParamName=~/addr/i and isIntegerType($FTypeName));
     # cblas_zdotu_sub (int const N, void const* X, int const incX, void const* Y, int const incY, void* dotu)
     return 1 if($PLevel==1 and $FTypeName eq "void");
     if(get_TypeType($FTypeId) eq "Array" and $Interface)
@@ -12372,7 +12375,7 @@ sub generateTest($)
                 $EnumList[$#EnumList-1] = 1;
                 $loopend = $TotalEnumList{"Count"};
             }
-            # if($loopstart<$loopend-1)
+            if($loopstart<$loopend-1)
             {
                 update_enumlist();
             }
@@ -15082,6 +15085,8 @@ sub print_after(@)
         printf("\t\t\t\t%20s  %-20s\n", $key, $hash{$key});
    }
     print "\t\t\t\t##########After end###########\n";
+    my $age;
+    $age=<>;
 
 }
 sub print_before(@)
@@ -15098,6 +15103,8 @@ sub print_before(@)
    #     print "$key -> $value\n";
    # }
     print "########before end################\n";
+    my $age;
+    $age=<>;
 
 }
 
