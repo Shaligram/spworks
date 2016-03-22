@@ -472,7 +472,7 @@ MORE INFORMATION:
 
 # Constants
 my $BUFF_SIZE = 256;
-my $DEFAULT_ARRAY_AMOUNT = 4;
+my $DEFAULT_ARRAY_AMOUNT = 6;
 my $MAX_PARAMS_INLINE = 3;
 my $MAX_PARAMS_LENGTH_INLINE = 60;
 my $HANGED_EXECUTION_TIME = 7;
@@ -5335,6 +5335,9 @@ sub add_VirtualSpecType(@)
     my $TypeType = get_TypeType($TypeId);
     my $I_ShortName = $CompleteSignature{$Init_Desc{"Interface"}}{"ShortName"};
     my $I_Header = $CompleteSignature{$Init_Desc{"Interface"}}{"Header"};
+
+#    print"FoundationTypeId:$FoundationTypeId\n FoundationTypeName:$FoundationTypeName\nPointerLevel:$PointerLevel\nFoundationTypeType:$FoundationTypeType\n";
+#    print"TypeName:$TypeName\nTypeType:$TypeType\nI_ShortName:$I_ShortName\nI_Header:$I_Header\n";
     if($Init_Desc{"Value"} eq "no value"
     or (defined $ValueCollection{$CurrentBlock}{$ParamName} and $ValueCollection{$CurrentBlock}{$ParamName}==$TypeId))
     { # create value atribute
@@ -5803,11 +5806,14 @@ sub add_VirtualSpecType(@)
                     elsif($ParamName=~/bridge/i) {
                         $NewInit_Desc{"Value"} = vary_values([0,1], \%Init_Desc);
                     }
+                    elsif($ParamName=~/port|if_id/i) {
+                        $NewInit_Desc{"Value"} = vary_values([0,1,2,3,4,16,17,18,19,20,32,33,34,35,64,65,66,80,81,82], \%Init_Desc);
+                    }
                     elsif($ParamName=~/socket|block/i) {
                         $NewInit_Desc{"Value"} = vary_values(["0"], \%Init_Desc);
                     }
                     elsif($ParamName=~/next_hop|ip_addr/i) {
-                        $NewInit_Desc{"Value"} = 0xc8c8c809;
+                        $NewInit_Desc{"Value"} = "0xc8c8c809";
                     }
                     elsif($ParamName=~/freq/i) {
                         $NewInit_Desc{"Value"} = vary_values(["50"], \%Init_Desc);
@@ -5999,11 +6005,11 @@ sub add_VirtualSpecType(@)
                 }
                 elsif($TypeName=~/bridge/i) 
                 {
-                    $NewInit_Desc{"Value"} = vary_values([0,1,16], \%Init_Desc);
+                    $NewInit_Desc{"Value"} = vary_values([0,16], \%Init_Desc);
                 }
                 elsif($TypeName=~/priority/i) 
                 {
-                    $NewInit_Desc{"Value"} = vary_values([0,1,2,3,4,5,6,7,8], \%Init_Desc);
+                    $NewInit_Desc{"Value"} = vary_values([0,7,8], \%Init_Desc);
                 }
                 elsif($TypeName=~/dscp/i) 
                 {
@@ -6011,7 +6017,20 @@ sub add_VirtualSpecType(@)
                 }
                 elsif($TypeName=~/queue/i) 
                 {
-                    $NewInit_Desc{"Value"} = vary_values([0,1,2,3,4,5,6,7,8], \%Init_Desc);
+                    $NewInit_Desc{"Value"} = vary_values([0,7,8], \%Init_Desc);
+                }
+                elsif($ParamName=~/port|if_id/i) 
+                {
+                    $NewInit_Desc{"Value"} = vary_values([0,1,2,3,4,16,17,18,19,20,32,33,34,35,64,65,66,80,81,82], \%Init_Desc);
+                }
+                elsif($ParamName=~/mac/i) # Considered as ARRAY so count only for one time below are 5 different type of MAC 
+                {
+                    $NewInit_Desc{"Value"} = vary_values(["0","0x10","0xff","0x11"], \%Init_Desc);
+                }
+                elsif($ParamName=~/ip_addr/i) # Considered as ARRAY so count only for one time below are 5 different type of MAC 
+                {
+                    #Not tested
+                    $NewInit_Desc{"Value"} = vary_values(["0x01010101","0xc8c8c801","0","0xFFFFFF"], \%Init_Desc);
                 }
                 else
                 {
@@ -6076,6 +6095,7 @@ sub push_in_list($$)
         push(@EnumList, 0);
         push(@EnumList, $Maxparam);
 
+#        print "Array element = $Maxparam for $ParamName and TotalCount = $TotalEnumList{'Count'}\n";
         $TotalEnumList{"$ParamName"} = 0; 
         $TotalEnumList{"enum"} = 1;
     }
@@ -6125,7 +6145,10 @@ sub vary_values($$)
     }
     else
     { # standalone
-        push_in_list($Init_Desc->{"ParamName"}, scalar(@ValuesArray));
+        if($Init_Desc->{"Index"} == 0)
+        {
+            push_in_list($Init_Desc->{"ParamName"}, scalar(@ValuesArray));
+        }
         my $Tid = $Init_Desc->{"ParamName"};
         return $ValuesArray[$TotalEnumList{"$Tid"}];
     }
@@ -6921,8 +6944,11 @@ sub getIntrinsicValue($)
     }
     elsif($TypeName=~/(\A| )char(\Z| )/)
     {
-        $IntrinsicNum{"Char"} += 1;
-        return "'".chr($IntrinsicNum{"Char"})."'";
+        $IntrinsicNum{"Int"} += 1;
+        return $IntrinsicNum{"Int"};
+#Since ADK ncp_uint8_t represents a integer value always of 1 Bytes, so return a integer value instead of char
+#        $IntrinsicNum{"Char"} += 1;
+#       return "'".chr($IntrinsicNum{"Char"})."'";
     }
     elsif($TypeName eq "wchar_t")
     {
@@ -9338,6 +9364,7 @@ sub initializeType(@)
     my $TypeName = get_TypeName($Init_Desc{"TypeId"});
     my $SpecValue = $Init_Desc{"Value"};
     %Init_Desc = add_VirtualSpecType(%Init_Desc);
+#    prinit_after("type_init",%Init_Desc);
     $Init_Desc{"Var"} = select_var_name($LongVarNames?$Init_Desc{"Key"}:$Init_Desc{"ParamName"}, $Init_Desc{"ParamNameExt"});
     if(($TypeName eq "...") and (($Init_Desc{"Value"} eq "no value") or ($Init_Desc{"Value"} eq "")))
     {
@@ -9790,7 +9817,6 @@ sub initializeParameter(@)
             "IsString" => $ParamDesc{"IsString"},
             "FuncPtrName" => $ParamDesc{"FuncPtrName"},
             "FuncPtrTypeId" => $ParamDesc{"FuncPtrTypeId"}));
-#            print_after("type_init",%Type_Init);
         if(not $Type_Init{"IsCorrect"})
         {
             pop(@RecurSpecType);
@@ -12127,7 +12153,7 @@ sub update_enumlist()
     #set the STATE of First ARRAY to Constant(1).It should be always constant only the read location increases 
     $EnumList[2] = 0;
     #print "\t\t\t\t\tFinal ".dump(@EnumList);
-#    print_after("",%TotalEnumList);
+    #print_after("",%TotalEnumList);
     # $age=<>;
 }
 sub generateTest($)
@@ -12410,8 +12436,8 @@ sub generateTest($)
         $Result{"main"} = correct_spaces($SanityTestfullBody);
         $SanityTest .= $SanityTestfullBody;
         $TotalEnumList{"Countset"} = 1;
-    
-        #Set to 0 Below statement added for debugging one loop
+        
+        #Set to 0 Below statement:added for debugging one loop
         if($TotalEnumList{"enum"} == 1)
         {
             if($loopstart==0) 
@@ -12426,10 +12452,12 @@ sub generateTest($)
             }
         }
 
+#        $loopend=20;
+
         $loopstart+=1;
     } while($loopstart<$loopend); #End of for loop for run tests of same Interface
-    printf("%3d Case for $Interface\n", $loopend+1);
-    $Result{"perInterfacecase"} = $loopend+1;
+    printf("%3d Case for $Interface\n", $loopend);
+    $Result{"perInterfacecase"} = $loopend;
 
     $SanityTest.= "    return 0;\n";
     $SanityTest .= "}\n";
