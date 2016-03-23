@@ -57,7 +57,6 @@ use File::Copy qw(copy);
 use Cwd qw(abs_path cwd realpath);
 use Config;
 use Data::Dumper qw(Dumper);
-use Data::Dump qw(dump);
 my $TOOL_VERSION = "1.98.7";
 my $OSgroup = get_OSgroup();
 my $ORIG_DIR = cwd();
