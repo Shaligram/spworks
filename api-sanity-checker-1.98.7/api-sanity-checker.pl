@@ -12339,7 +12339,7 @@ sub generateTest($)
                 }
             }
             else {
-                $SanityTestBody .="retVal=".$TestComponents{"Call"}."\n";
+                $SanityTestBody .="retVal=".$TestComponents{"Call"}.";\n";
             }
         }
         elsif($CompleteSignature{$Interface}{"Destructor"}) {
@@ -12456,8 +12456,8 @@ sub generateTest($)
 
         $loopstart+=1;
     } while($loopstart<$loopend); #End of for loop for run tests of same Interface
-    printf("%3d Case for $Interface\n", $loopend);
-    $Result{"perInterfacecase"} = $loopend;
+    printf("%3d Case for $Interface\n", $loopstart);
+    $Result{"perInterfacecase"} = $loopstart;
 
     $SanityTest.= "    return 0;\n";
     $SanityTest .= "}\n";
