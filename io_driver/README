@@ -1,0 +1,14 @@
+README
+
+io_drv is a light kernel loadable module which creates tap interfaces which can be used to send network traffic. 
+By default this module creates four number of interfaces with name: myif-0, myif-1, myif-2, myif-3. 
+This utility consists of files: io_drv.c, Makefile, io_drv.ko (Kernel module after compilation)
+
+Steps to create interface using id_driver
+1. Compilation: To compile, use command 'make' which will generate io_drv.ko
+2. Loading kernel module to create interfaces (requires super user rights): 
+    insmod io_drv.ko
+3. Unloading io_drv modile to remove interfaces (requires super user rights) : 
+    rmmod io_drv
+
+If you want custom names and number of interfaces, IF_NAME and NUM_OF_IFACE macros can be modified accordingly in file io_drv.c 
