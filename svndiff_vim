@@ -16,7 +16,7 @@ then
 #echo "`git diff --stat origin/lionfish..`"
 echo "`git status -uno . | grep -v "use" --color`"
 echo ""
-#   echo "Usage: svndiff [option] file"
+#   echo "Usage:  svndiff [option] file"
 #   echo "Options:"
 #   echo "  -h         Diff with latest in repository (HEAD) - Default"
 #   echo "  -b         Diff with what you had checked out (BASE)"
