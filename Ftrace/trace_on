@@ -1,0 +1,19 @@
+cd /sys/kernel/debug/tracing
+echo "Available tracers - "
+cat available_tracers
+echo "Current tracing level "
+cat current_tracer
+echo function_graph > current_tracer
+echo 1 > tracing_on
+echo "Execute the module or command to trace ---->>"
+read
+cp -rf trace /tmp/log_trace
+echo nop > current_tracer
+echo 1 > tracing_on
+echo "All loggin disabled"
+echo "Available tracers - "
+cat available_tracers
+echo "Current tracing level "
+cat current_tracer
+
+
