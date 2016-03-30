@@ -1,4 +1,4 @@
-git pull behind proxy
+#git pull behind proxy
 git config --global http.proxy $http_proxy
 
 
