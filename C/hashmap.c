@@ -273,6 +273,8 @@ int hashmap_put(map_t in, char* key, any_t value){
         index = hashmap_hash(in, key);
     }
 
+    printf(" value  - %p ",value);
+    printf("Index where is stored %d  -- %s\n", index, key);
     /* Set the data */
     m->data[index].data = value;
     m->data[index].key = key;

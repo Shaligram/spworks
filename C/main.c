@@ -10,7 +10,8 @@
 
 #define KEY_MAX_LENGTH (256)
 #define KEY_PREFIX ("somekey")
-#define KEY_COUNT (1024*1024)
+/*#define KEY_COUNT (1024*1024)*/
+#define KEY_COUNT 20
 
 typedef struct data_struct_s
 {
@@ -36,9 +37,11 @@ int main(char* argv, int argc)
         snprintf(value->key_string, KEY_MAX_LENGTH, "%s%d", KEY_PREFIX, index);
         value->number = index;
 
+        printf("value  - %p", value);
         error = hashmap_put(mymap, value->key_string, value);
         assert(error==MAP_OK);
     }
+        getchar();
 
     /* Now, check all of the expected values are there */
     for (index=0; index<KEY_COUNT; index+=1)
