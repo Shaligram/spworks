@@ -1,5 +1,7 @@
 /* Include the sbrk function */ 
-#include <unistd.h> 
+#include <unistd.h>
+#include <stdio.h>
+/*gcc -shared -fpic malloc.c -o malloc.so to create the .so */
 
 int has_initialized = 0;
 void *managed_memory_start;
@@ -14,6 +16,8 @@ void malloc_init()
      *   *just set the beginning to be last_valid_address 
      *     */  
     managed_memory_start = last_valid_address;     
+    
+    printf(" Malloc init memory locaiton %p\n", last_valid_address);
 
     /* Okay, we're initialized and ready to go */
     has_initialized = 1;   
@@ -33,6 +37,7 @@ void free(void *firstbyte) {
     mcb = firstbyte - sizeof(struct mem_control_block);   
     /* Mark the block as being available */ 
     mcb->is_available = 1;    
+    printf(" freed memory location    %p\n", firstbyte);
     /* That's It!  We're done. */ 
     return;   
 }  
@@ -54,6 +59,7 @@ void *malloc(long numbytes) {
     /* Initialize if we haven't already done so */
     if(! has_initialized)  { 
         malloc_init();
+        printf("MALLOC init done \n");
     }
 
     /* The memory we search for has to include the memory 
@@ -73,6 +79,7 @@ void *malloc(long numbytes) {
     /* Keep going until we have searched all allocated space */ 
     while(current_location != last_valid_address)  
     { 
+        printf("current_location %p last_valid_address %p\n", current_location, last_valid_address);
         /* current_location and current_location_mcb point
          *    * to the same address.  However, current_location_mcb
          *       * is of the correct type so we can use it as a struct.
@@ -84,6 +91,7 @@ void *malloc(long numbytes) {
 
         if(current_location_mcb->is_available)
         {
+            printf("Available location %p\n", current_location);
             if(current_location_mcb->size >= numbytes)
             {
                 /* Woohoo!  We've found an open, 
@@ -113,6 +121,7 @@ void *malloc(long numbytes) {
      *     */
     if(! memory_location)
     {
+        printf("Move prgram break\n");
         /* Move the program break numbytes further */
         sbrk(numbytes);
 
@@ -140,6 +149,7 @@ void *malloc(long numbytes) {
     /* Move the pointer past the mem_control_block */
     memory_location = memory_location + sizeof(struct mem_control_block);
 
+    printf(" returned memory location %p\n", memory_location);
     /* Return the pointer */
     return memory_location;
 }
