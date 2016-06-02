@@ -20,6 +20,7 @@ then enter the username,password,proxy_ip and port in given format
  Acquire::https::proxy "https://proxy_username:password@proxy_ip:port" ;
  Acquire::ftp::proxy "ftp://proxy_username:password@proxy_ip:port ";
 
+libncurses5-dev
 
 Kernel FTRACE debugging
 cd /sys/kernel/debug/tracing
