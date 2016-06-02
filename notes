@@ -24,3 +24,10 @@ libncurses5-dev
 
 Kernel FTRACE debugging
 cd /sys/kernel/debug/tracing
+
+To install Xbunut on Ubuntu 16.04
+sudo apt-get install xubuntu-desktop gksu leafpad synaptic
+reboot
+sudo apt-get remove nautilus gnome-power-manager gnome-screensaver gnome-termina* gnome-pane* gnome-applet* gnome-bluetooth gnome-desktop* gnome-sessio* gnome-user* gnome-shell-common compiz compiz* unity unity* hud zeitgeist zeitgeist* python-zeitgeist libzeitgeist* activity-log-manager-common gnome-control-center gnome-screenshot overlay-scrollba* && sudo apt-get install xubuntu-community-wallpapers && sudo apt-get autoremove
+reboot
+ sudo apt-get install gnome-software
