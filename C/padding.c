@@ -1,5 +1,15 @@
 #include <stdio.h>
 
+/*
+typedef struct
+{
+         char Data1;
+              int Data2;
+                   unsigned short Data3;
+                        char Data4;
+
+}__attribute__((packed, aligned(1))) sSampleStruct;  
+*/
  
 typedef struct structa_tag
 {
