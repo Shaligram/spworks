@@ -14,6 +14,6 @@ int main(void)
 
                 for(;i<0xffffff;i++);
 
-exit(0);
-                _exit(0);
+                printf("Cleaned\n");
+
 }
