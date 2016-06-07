@@ -5,6 +5,8 @@ void ctest2(int *);
 int main()
 {
        int x;
+          ctest1(&x);
+             printf("Valx=%d\n",x);
           ctest2(&x);
              printf("Valx=%d\n",x);
 

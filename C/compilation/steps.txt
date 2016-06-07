@@ -5,3 +5,17 @@ Linking with the library:
 cc -o executable-name prog.c libctest.a
 cc -o executable-name prog.c -L/path/to/library-directory -lctest
 
+----Dynamic Linking
+    gcc -Wall -fPIC -c *.c
+    gcc -shared -Wl,-soname,libctest.so.1 -o libctest.so.1.0   *.o
+    mv libctest.so.1.0 /opt/lib
+    
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lib/
+    gcc -Wall -L/opt/lib prog.c -lctest -o prog
+
+----Dynamic Linking load/unload at runtime using same library libctest.so
+    gcc -rdynamic -o progdl program_dynamic.c -ldl
+    
+
+
+    
