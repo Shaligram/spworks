@@ -7,6 +7,12 @@ int has_initialized = 0;
 void *managed_memory_start;
 void *last_valid_address;
 
+struct mem_control_block { 
+    int is_available; 
+    int size;
+};
+
+
 void malloc_init()
 { 
     /* grab the last valid address from the OS */  
@@ -22,11 +28,6 @@ void malloc_init()
     /* Okay, we're initialized and ready to go */
     has_initialized = 1;   
 }
-
-struct mem_control_block { 
-    int is_available; 
-    int size;
-};
 
 void free(void *firstbyte) { 
     struct mem_control_block *mcb;  
