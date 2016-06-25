@@ -28,9 +28,9 @@ else
     {
         /* keep each elem static one by one and swap */
 
-        swap(a+l,a+i);
+        swap(a+l,a+i); /*swaps the position*/
         permute(a, l+1, r);
-        swap(a+l, a+i);
+        swap(a+l, a+i); /* reverts it back */
 
     }
 }
@@ -41,7 +41,7 @@ else
 /* Driver program to test above functions */
 int main()
 {
-    char str[] = "ABCD";
+    char str[] = "ABC";
     int n = strlen(str);
     permute(str, 0, n-1);
     return 0;

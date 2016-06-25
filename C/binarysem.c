@@ -4,7 +4,6 @@
 #include <semaphore.h>
 #define LIMIT 1000
 
-int global =1;
     sem_t sem1,sem2;
 void* function1(void *p)
 {
