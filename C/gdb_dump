@@ -1,0 +1,471 @@
+Breakpoint 1 at 0x400510: file test.c, line 16.
+Starting program: /home/sprakash/my_works/C/a.out 
+
+Breakpoint 1, main () at test.c:16
+16	    char a=10; 
+3: /x $esp = 0xffffe7b0
+2: /x $ebp = 0xffffe7c0
+1: /x $eax = 0x400508
+17	    func(a,20);
+3: /x $esp = 0xffffe7b0
+2: /x $ebp = 0xffffe7c0
+1: /x $eax = 0x400508
+func (a=10 '\n', b=20) at test.c:6
+6	    if(b==0)
+3: /x $esp = 0xffffe7a0
+2: /x $ebp = 0xffffe7a0
+1: /x $eax = 0xa
+11	}
+3: /x $esp = 0xffffe7a0
+2: /x $ebp = 0xffffe7a0
+1: /x $eax = 0xa
+main () at test.c:18
+18	}
+3: /x $esp = 0xffffe7b0
+2: /x $ebp = 0xffffe7c0
+1: /x $eax = 0xa
+__libc_start_main (main=0x400508 <main>, argc=1, argv=0x7fffffffe8a8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fffffffe898) at libc-start.c:321
+321	libc-start.c: No such file or directory.
+3: /x $esp = 0xffffe7d0
+2: /x $ebp = 0x0
+1: /x $eax = 0xa
+__GI_exit (status=10) at exit.c:104
+104	exit.c: No such file or directory.
+3: /x $esp = 0xffffe7c8
+2: /x $ebp = 0x0
+1: /x $eax = 0xa
+103	in exit.c
+3: /x $esp = 0xffffe7c8
+2: /x $ebp = 0x0
+1: /x $eax = 0xa
+104	in exit.c
+3: /x $esp = 0xffffe7c0
+2: /x $ebp = 0x0
+1: /x $eax = 0xa
+__run_exit_handlers (status=10, listp=0x7ffff7dd36c8 <__exit_funcs>, run_list_atexit=run_list_atexit@entry=true) at exit.c:35
+35	in exit.c
+3: /x $esp = 0xffffe7b8
+2: /x $ebp = 0x0
+1: /x $eax = 0xa
+40	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0xa
+__GI___call_tls_dtors () at cxa_thread_atexit_impl.c:82
+82	cxa_thread_atexit_impl.c: No such file or directory.
+3: /x $esp = 0xffffe788
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0xa
+83	in cxa_thread_atexit_impl.c
+3: /x $esp = 0xffffe770
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0xa
+101	in cxa_thread_atexit_impl.c
+3: /x $esp = 0xffffe770
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0xf7fde690
+__run_exit_handlers (status=10, listp=0x7ffff7dd36c8 <__exit_funcs>, run_list_atexit=run_list_atexit@entry=true) at exit.c:46
+46	exit.c: No such file or directory.
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0xf7fde690
+50	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x1
+53	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x1
+52	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+54	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+78	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+82	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x70041498
+80	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x70041498
+82	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0xf7dea560
+0x00000000004004a0 in __do_global_dtors_aux ()
+3: /x $esp = 0xffffe6e8
+2: /x $ebp = 0xffffe780
+1: /x $eax = 0x600e88
+Single stepping until exit from function __do_global_dtors_aux,
+which has no line number information.
+0x0000000000400430 in deregister_tm_clones ()
+3: /x $esp = 0xffffe6d8
+2: /x $ebp = 0xffffe6e0
+1: /x $eax = 0x600e88
+Single stepping until exit from function deregister_tm_clones,
+which has no line number information.
+0x00000000004004b2 in __do_global_dtors_aux ()
+3: /x $esp = 0xffffe6e0
+2: /x $ebp = 0xffffe6e0
+1: /x $eax = 0x7
+Single stepping until exit from function __do_global_dtors_aux,
+which has no line number information.
+0x00000000004005a4 in _fini ()
+3: /x $esp = 0xffffe6e8
+2: /x $ebp = 0xffffe780
+1: /x $eax = 0x4005a4
+Single stepping until exit from function _fini,
+which has no line number information.
+__run_exit_handlers (status=10, listp=0x7ffff7dd36c8 <__exit_funcs>, run_list_atexit=run_list_atexit@entry=true) at exit.c:83
+83	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+50	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+87	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+88	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+87	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+88	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+94	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+95	in exit.c
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dd36c8
+1: /x $eax = 0x0
+_IO_cleanup () at genops.c:1010
+1010	genops.c: No such file or directory.
+3: /x $esp = 0xffffe788
+2: /x $ebp = 0xf7dcf850
+1: /x $eax = 0x0
+1013	in genops.c
+3: /x $esp = 0xffffe780
+2: /x $ebp = 0xf7dcf850
+1: /x $eax = 0x0
+1010	in genops.c
+3: /x $esp = 0xffffe780
+2: /x $ebp = 0xf7dcf850
+1: /x $eax = 0x0
+1022	in genops.c
+3: /x $esp = 0xffffe770
+2: /x $ebp = 0xf7dcf850
+1: /x $eax = 0x0
+_IO_unbuffer_write () at genops.c:962
+962	in genops.c
+3: /x $esp = 0xffffe770
+2: /x $ebp = 0xf7dcf850
+1: /x $eax = 0x0
+_IO_cleanup () at genops.c:1010
+1010	in genops.c
+3: /x $esp = 0xffffe770
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+1013	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+_IO_flush_all_lockp (do_lock=do_lock@entry=0) at genops.c:822
+822	in genops.c
+3: /x $esp = 0xffffe758
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+828	in genops.c
+3: /x $esp = 0xffffe740
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+822	in genops.c
+3: /x $esp = 0xffffe740
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+828	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+834	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+823	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+833	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+835	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+839	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+838	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+837	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+838	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+841	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+851	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+855	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+853	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+855	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+862	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+835	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+838	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+837	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+838	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+841	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+851	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+855	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+853	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+855	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+862	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+835	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+838	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+837	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+838	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+841	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+851	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+855	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+853	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+855	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+862	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+835	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+866	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+868	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+872	in genops.c
+3: /x $esp = 0xffffe700
+2: /x $ebp = 0x0
+1: /x $eax = 0x0
+_IO_cleanup () at genops.c:1022
+1022	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+_IO_unbuffer_write () at genops.c:950
+950	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+_IO_cleanup () at genops.c:1013
+1013	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+1022	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+_IO_unbuffer_write () at genops.c:950
+950	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+952	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+990	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+950	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+952	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+954	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+953	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+956	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+990	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+950	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+952	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+954	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+953	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+990	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+950	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+_IO_cleanup () at genops.c:1025
+1025	in genops.c
+3: /x $esp = 0xffffe760
+2: /x $ebp = 0xf7fde740
+1: /x $eax = 0x0
+__run_exit_handlers (status=10, listp=<optimized out>, run_list_atexit=run_list_atexit@entry=true) at exit.c:97
+97	exit.c: No such file or directory.
+3: /x $esp = 0xffffe790
+2: /x $ebp = 0xf7dcf858
+1: /x $eax = 0x0
+__GI__exit (status=status@entry=10) at ../sysdeps/unix/sysv/linux/_exit.c:28
+28	../sysdeps/unix/sysv/linux/_exit.c: No such file or directory.
+3: /x $esp = 0xffffe788
+2: /x $ebp = 0xf7dcf858
+1: /x $eax = 0x0
+32	in ../sysdeps/unix/sysv/linux/_exit.c
+3: /x $esp = 0xffffe788
+2: /x $ebp = 0xf7dcf858
+1: /x $eax = 0x0
+34	in ../sysdeps/unix/sysv/linux/_exit.c
+3: /x $esp = 0xffffe788
+2: /x $ebp = 0xf7dcf858
+1: /x $eax = 0x0
+32	in ../sysdeps/unix/sysv/linux/_exit.c
+3: /x $esp = 0xffffe788
+2: /x $ebp = 0xf7dcf858
+1: /x $eax = 0x0
+[Inferior 1 (process 2414) exited with code 012]
+The program is not being run.
+The program is not being run.
+The program is not being run.

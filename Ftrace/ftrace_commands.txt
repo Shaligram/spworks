@@ -1,0 +1,10 @@
+cd /sys/kernel/debug/tracing
+available_tracers
+
+#enables logging
+echo 1 > tracing_on
+echo 0 > tracing_on 
+
+
+echo function_graph > current_tracer
+
