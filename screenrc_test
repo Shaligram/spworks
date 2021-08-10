@@ -116,7 +116,8 @@ bind ^\
 #     hardstatus string ''$STY' %{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'
      shelltitle "  $STY  |sh"
 
-#hardstatus string ''$STY' '%{= kw}[ %H ] %=%{w}[ %{r}%l%{w} ]%{w}[%{y} %Y-%m-%d %C %A %{w}]%{w}'
+hardstatus string ''$STY' '%{= kw}[ %H ] %=%{w}[ %{r}%l%{w} ]%{w}[%{y} %Y-%m-%d %C %A %{w}]%{w}'
+#hardstatus string "%S"
 
      silencewait 2
 # Bind F11 and F12 (NOT F1 and F2) to previous and next screen window
@@ -124,12 +125,15 @@ bind ^\
      bindkey -k F2 next
 
 # Default screens
-     screen -t acpdbg   1
-     screen -t application 2
-     screen -t UTcode 3 
-     screen -t coding1   4 
-     screen -t coding2  5 
-     screen -t compile 6 
+     screen -t INSTALL 0
+     screen -t OAMSCA   1
+     screen -t GDB 2
+     screen -t LOG 3 
+     screen -t VPPCTL   4 
+     screen -t PERF  5 
+     screen -t PERF  6 
+     screen -t PERF  7 
+     screen -t CORE 8
 
      bindkey -k k1 select 1
      bindkey -k k2 select 2
