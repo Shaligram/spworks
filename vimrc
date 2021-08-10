@@ -13,7 +13,8 @@ filetype plugin indent on
 au BufReadPost *.fpl set syntax=c 
 "nmap <F3> :redir @a<CR>:silent g//<CR>j<CR>:redir END<CR>:new<CR>:put!a<CR><CR>
 "nmap <F3> :redir @a<CR>:silent g//<CR>j<CR>:redir END<CR>:new<CR>:put!a<CR><CR>
-:nmap  :%s///g
+:nmap  :%s/
+//g
 :set nowrap
 :highlight Search ctermfg=white ctermbg=blue cterm=NONE
 ":highlight OverLength ctermbg=cyan ctermfg=white guibg=#592929
