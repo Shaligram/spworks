@@ -1,0 +1,21 @@
+python ./multi/multiclient.py --interface=192.168.199.201 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.202 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.203 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.204 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.205 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.206 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.207 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.208 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.209 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.210 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.211 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.212 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.213 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.214 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.215 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.216 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.217 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.218 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.219 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+#python ~/multi/multiclient.py --interface=192.168.199.220 --host=192.168.200.125 --dest=192.168.200.125 -b 100 -p 8080 &
+
