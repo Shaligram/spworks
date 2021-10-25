@@ -93,3 +93,39 @@ sshcd () { ssh -t "$1" "cd \"$2\"; exec \$SHELL -l"; }
 
 alias p4diff="p4 changes -l \"...#>have\""
 #stty cols 132 rows 200 -> set the rows in terminal of screen to higher value
+
+
+
+
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+  }
+export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+export MYVIMRC=/home/shaligram/.vimrc
+
+
+# Use vim to edit files
+  export CSCOPE_EDITOR='vim'
+
+# Generate cscope database
+  function cscope_build() {
+      # Generate a list of all source files starting from the current directory
+      # The -o means logical or
+      find . -name "*.c" -o -name "*.cc" -o -name "*.cpp" -o -name "*.h" -o -name "*.hh" -o -name "*.hpp" > cscope.files
+          # -q build fast but larger database
+          # -R search symbols recursively
+          # -b build the database only, don't fire cscope
+          # -i file that contains list of file paths to be processed
+          # This will generate a few cscope.* files
+          cscope -q -R -b -i cscope.files
+            # Temporary files, remove them
+            # rm -f cscope.files cscope.in.out cscope.po.out
+            echo "The cscope database is generated"
+  }
+# -d don't build database, use kscope_generate explicitly
+alias cscope="cscope -d"
+unset PROMPT_COMMAND
+alias vim='vim -S ~/shaligram/.vimrc'
+alias vi='vim -S ~/shaligram/.vimrc'
+alias vimdiff='vimdiff -S ~/shaligram/.vimrc'
+
