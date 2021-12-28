@@ -1,63 +1,57 @@
-:set hls!
-filetype plugin indent on
-"filetype plugin on
-":set autoindent
-":set cindent
-:set ls=4
+:set mouse=a
 :set incsearch
 :set syntax=on
-:set guifont=Monospace\ Regular\ 9
-:set ic
+:syn on
+:set noic
 :set nu
-:syn on 
-:colorscheme evening
-:set syntax=c
-"au BufReadPost *.fpl set syntax=c 
-"nmap <F3> :redir @a<CR>:silent g//<CR>j<CR>:redir "END<CR>:new<CR>:put!a<CR><CR>
-""nmap <F3> :redir @a<CR>:silent g//<CR>j<CR>:redir END<CR>:new<CR>:put!a<CR><CR>
-":nmap º%s/
 :set nowrap
 :highlight Search ctermfg=white ctermbg=blue cterm=NONE
-":highlight OverLength ctermbg=cyan ctermfg=white guibg=#592929
-"":match OverLength /\%89v.\+/
-:nmap <F9> :bnext<CR>
-:nmap <F8> :bprevious<CR>
-:nmap '' :BufExplorer<CR>
-
-":nmap <F9> :tabnext<CR>
-":nmap <F8> :tabprevious<CR>
-":nmap <F10> :e!<CR>
-" If the current buffer has never been saved, it will have no name,
-" " " call the file browser to save it, otherwise just save it.
-" "nnoremap <silent> <C-S> :if expand("%") == ""<CR>browse confirm
-" w<CR>else<CR>confirm w<CR>endif<CR>
 :set nows
-"
-" " Uncomment the following to have Vim jump to the last position when                                                       
-" " reopening a file
-if has("autocmd")
-   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
+:colorscheme elflord
+:colorscheme murphy
+:colorscheme ron
+                                                                                                                                                                                            [39/9390]
+":command! -nargs=+ Mmsearch vimgrep /<args>/gj /<args>/**/*.c **/*.h **/*.cpp **/*.hpp **/*.xml |cw
+:command! -nargs=+ Mmsearch vimgrep /<args>/gj <args>/**/* |cw
+
+" The Silver Searcher
+if executable('ag')
+" Use ag over grep
+"set grepprg=ag\ --silent\ --nocolor
+set grepprg=ag\ --vimgrep\ $*
+" Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+let g:ctrlp_user_command = 'ag %s -l -g ""'
+"ag is fast enough that CtrlP doesn't need to cache
+let g:ctrlp_use_caching = 1
 endif
-:set mouse=a
+" bind K to grep word under cursor
+ nnoremap K :silent :grep! "\b<C-R><C-W>\b"<CR>:cw<CR> :redraw! <CR>
 
-":set expandtab
-:set softtabstop=4
-"below changes width to wrap test in a single line
-":set textwidth=160
-":set nonu
-"
-":set tags=tags
-"
-""nnoremap <C-p> :!/usr/bin/firefox %<CR>
+"Search Visual Text by \\
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
-:set nu
 
-" check file change every 4 seconds ('CursorHold') and reload the buffer upon
-" detecting change
-" ":set autoread                                                                                                                                                                                    
-" "au CursorHold * 4 
-"
+command! -nargs=1 Search call MySearch(<q-args>)
+function! MySearch(grep_term)
+" upper logic
+   execute 'silent grep' a:grep_term | copen
+"   " lower logic
+   endfunction
+
+" Silver Serachr
+
+:set wildignore+=bin/**,3rd-party/**,com/**,*.o,*.la,*.a,test.c
+
+
+
+let g:ctrlp_working_path_mode = 0
+:set tags+=./tags
+:set tags+=/root/shaligram/vcm-gerrit-saegw/tags
+:set tags+=/root/shaligram/vcm-gerrit-saegw/vcm-dpe/tags
+:set tags+=/root/shaligram/vcm-gerrit-saegw/vcm-base/tags
+:set tags+=/root/shaligram/vcm-gerrit-saegw/vcm-ms/tags
+:set tags+=/root/shaligram/vcm-gerrit-saegw/vcm-cli/tags
+
 fun! ShowFuncName()
     let lnum = line(".")
     let col = col(".")
@@ -67,27 +61,14 @@ fun! ShowFuncName()
     call search("\\%" . lnum . "l" . "\\%" . col . "c")
 endfun
 map f :call ShowFuncName() <CR>
-" Status Line {  
-        set laststatus=2                             " always show statusbar  
-        set statusline=  
-        set statusline+=%-10.3n\                     " buffer number  
-        set statusline+=%f\                          " filename   
-        set statusline+=%h%m%r%w                     " status flags  
-        "       set statusline+=\[%{strlen(&ft)?&ft:'none'}] " file type  
-        "set statusline+=%=                           " right align remainder  
-        " set statusline+=0x%-8B                       " character value  
-        set statusline+=%-14(%l,%c%V%)               " line, character  
-        set statusline+=%<%P                         " file position  
-"}  
-"Automatically switch the window to next tab
-autocmd VimEnter * wincmd w
+:highlight Search ctermfg=white ctermbg=blue cterm=NONE
+:nmap '' :BufExplorer<CR>
+:nmap <F3> :vimgrep<space>  %|cw
 
+map gn :bn<cr>
+map gp :bp<cr>
+map gd :bd<cr>
 
-"set tags=./tags;/,tags;/
-:set tags=./tags;,tags;/nfs-bfs/workspace/odc/sprakash/vpp/src/tags;
-
-
-:set hls!
 :set confirm
 
 function! ConfirmQuit(writeFile)
@@ -98,7 +79,6 @@ function! ConfirmQuit(writeFile)
     endif
     :write
   endif
-
   if (winnr('$')==1 && tabpagenr('$')==1)
     if (confirm("Do you really want to quit?", "&Yes\n&No", 2)==1)
       :quit
@@ -110,9 +90,4 @@ endfu
 
 cnoremap <silent> q<CR>  :call ConfirmQuit(0)<CR>
 cnoremap <silent> x<CR>  :call ConfirmQuit(1)<CR>
-:set tabstop=2 shiftwidth=4 expandtab
-":retab
-
-"turns on the tab character ecept in C files 
-"set list
-"set listchars=tab:>-
+:set hls
