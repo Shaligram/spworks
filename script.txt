@@ -1,0 +1,22 @@
+define gdbprinttree
+    set $index = 0
+
+    set $index = $index + 1
+    eval "set $stack_%d = $arg0", $index
+
+    while $index > 0
+        eval "set $temp = $stack_%d", $index
+        set $index = $index - 1
+        print *$temp
+
+        if $temp.map_entry.rbe_right
+            set $index = $index + 1
+            eval "set $stack_%d = $temp.map_entry.rbe_right", $index
+        end
+
+        if $temp.map_entry.rbe_left
+            set $index = $index + 1
+            eval "set $stack_%d = $temp.map_entry.rbe_left", $index
+        end
+    end
+end
