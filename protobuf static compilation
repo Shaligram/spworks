@@ -1,0 +1,13 @@
+
+
+sudo yum install autoconf automake libtool unzip gcc-c++ git -y
+git clone https://github.com/google/protobuf.git
+cd protobuf
+./autogen.sh
+./configure
+make
+make install
+The protoc binary will be installed to /usr/local/bin by default.
+
+
+$ ldconfig
