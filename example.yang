@@ -1,0 +1,14 @@
+          leaf area {
+              description "OSPF service Area ID";
+              reference "FRN-11116";
+              type inet:ipv4-address {
+                  pattern '0\.0\.0\.0';
+              }
+              default "0.0.0.0";
+          }
+          leaf ipaddress {
+              description "OSPF IPv4 address for sending Hello message N6/SGI IP";
+              reference "FRN-11116";
+              type inet:ipv4-address;
+              mandatory true;
+          }
