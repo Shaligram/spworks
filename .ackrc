@@ -1,0 +1,36 @@
+  --ignore-dir=nytprof
+  --smart-case
+  --sort-files
+  --type-add=md=.md
+  --type-set=md=.mkd,.am,.txt
+  --nomd
+
+  # Notes:
+  # - This configuration file works with `ack`, but not with `ag`
+
+  # Always sort the files
+  #--sort-files
+
+  # Always color, even if piping to an another program
+  --color
+
+  # Use smart-case
+  --smart-case
+
+  # Ignore following directories
+  --ignore-dir=logs/
+  --ignore-dir=tmp/
+  --ignore-dir=vcm-sdm/
+  --ignore-dir=public/assets/
+  --ignore-dir=node_modules/
+  --ignore-dir=bower_components/
+  --ignore-dir=bin*/
+  --ignore-dir=cmake-build-debug/
+
+ # Ignore files
+ --ignore-file=is:tags
+ --ignore-file=is:build.log
+ --ignore-file=is:cscope.out
+ --ignore-file=is:cscope.files
+ --ignore-file=is:Cmake
+
