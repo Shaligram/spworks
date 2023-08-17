@@ -1,0 +1,217 @@
+{
+    "workbench.editor.enablePreviewFromCodeNavigation": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "debug.saveBeforeStart": "none",
+    "task.saveBeforeRun": "prompt",
+    "window.zoomLevel": -0.28133422777602873,
+    "git.enabled": false,
+    "textmarker.autoSelectDistinctiveTextColor": true,
+    "terminal.integrated.altClickMovesCursor": false,
+    "task.autoDetect": "off",
+    "editor.renderWhitespace": "none",
+    "editor.minimap.enabled": false,
+    "search.quickOpen.history.filterSortOrder": "recency",
+    "search.seedOnFocus": true,
+    "editor.stablePeek": true,
+    "[xml]": {
+        "editor.defaultFormatter": "DotJoshJohnson.xml"
+    },
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "C_Cpp.updateChannel": "Insiders",
+    "extensions.autoUpdate": false,
+    "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
+    "C_Cpp.intelliSenseUpdateDelay": 500,
+    "notebook.breadcrumbs.showCodeCells": false,
+    "if-conditioner.symbols": [
+        {
+            "symbol": "__VCM_DPE_USE_DPDK__",
+            "val": 1
+        },
+        {
+            "symbol": "VCM_LOG_DEBG",
+            "val": 0            
+        }
+    ],
+    
+    
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.value": 20,
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.editor.wrapTabs": true,
+    "workbench.editor.revealIfOpen": true,
+    "editor.bracketPairColorization.enabled": true,
+    "workbench.startupEditor": "none",
+    "extensions.ignoreRecommendations": true,
+    "C_Cpp.default.compilerPath": "",
+    "workbench.colorTheme": "Visual Studio Light - C++",
+    "workbench.iconTheme": "null",
+    "editor.renderControlCharacters": false,
+    "update.enableWindowsBackgroundUpdates": false,
+    "update.showReleaseNotes": false,
+    "workbench.editor.enablePreview": false,
+    "workbench.sideBar.location": "right",
+    "explorer.openEditors.visible": 50,
+    "breadcrumbs.enabled": false,
+    "editor.cursorStyle": "line",
+    "editor.fontSize": 13.5,
+    "editor.fontFamily": "Verdana, 'Courier New ', monospace",
+    "references.preferredLocation": "view",
+    "back-n-forth.withLastEditLocation": false,
+    "workbench.editor.showTabs": false,
+    "files.autoSave": "afterDelay",
+    "editor.hover.enabled": false,
+    "editor.glyphMargin": false,
+
+    "editor.selectionHighlight": false,
+    "editor.occurrencesHighlight": true,
+    "editor.semanticHighlighting.enabled": false,
+    "editor.tokenColorCustomizations":
+    {
+       "textMateRules":
+        [
+            {
+                "scope": [
+                    "emphasis",
+                    "strong",
+
+                    "support",
+                    "support.class",
+                    "support.constant",
+                    "support.function",
+                    "support.other",
+                    "support.type",
+                    "support.type.property-name",
+                    "support.variable", 
+                    
+                    "punctuation.definition.comment",
+                    "punctuation.definition.string.begin",
+                    "punctuation.definition.string.end",
+                    "punctuation.separator",
+                    "punctuation.separator.continuation",
+                    "punctuation.terminator",
+             
+                    "markup",
+                    "markup.bold",
+                    "markup.changed",
+                    "markup.deleted",
+                    "markup.heading",
+                    "markup.inline.raw",
+                    "markup.inserted",
+                    "markup.italic",
+                    "markup.list",
+                    "markup.list.numbered",
+                    "markup.list.unnumbered",
+                    "markup.other",
+                    "markup.quote",
+                    "markup.raw",
+                    "markup.underline",
+                    "markup.underline.link",
+
+                    "meta",
+                    "meta.block",
+
+                    
+                    "meta.return-type",
+                    "meta.selector",
+                    "meta.tag",
+                    "meta.type.annotation",
+                    "meta.type",
+                    "meta.preprocessor",
+
+
+                    "constant",
+                    "constant.character",
+                    "constant.character.escape",
+                    "constant.numeric",
+                    "constant.numeric.integer",
+                    "constant.numeric.float",
+                    "constant.numeric.hex",
+                    "constant.numeric.octal",
+                    "constant.other",
+                    "constant.regexp",
+                    "constant.rgb-value",
+               
+                    "entity",
+                    "entity.name",
+                    "entity.name.class",
+                    "entity.name.section",
+                    "entity.name.selector",
+                    "entity.name.tag",
+                    "entity.name.type",
+                    "entity.other",
+                    "entity.other.attribute-name",
+                    "entity.other.inherited-class",
+
+                    "keyword",
+                    "keyword.control",
+                    "keyword.operator",
+                    "keyword.operator.new",
+                    "keyword.operator.assignment",
+                    "keyword.operator.arithmetic",
+                    "keyword.operator.logical",
+                    "keyword.other",  
+
+                    "variable",
+                    "variable.language",
+                    "variable.name",
+                    "variable.other",
+                    "variable.other.readwrite",
+                    "variable.parameter",
+                ],
+                "settings": {
+                    "fontStyle": "",  "foreground": "#656663" 
+                 }
+            },
+             {
+                "scope": [
+                    "string",
+                    "string.interpolated",
+                    "string.other",
+                    "string.quoted",
+                    "string.quoted.double",
+                    "string.quoted.other",
+                    "string.quoted.single",
+                    "string.quoted.triple",
+                    "string.regexp",
+                    "string.unquoted",
+
+                    "comment",
+                ],
+                "settings": {
+                    "fontStyle": "italic",  "foreground": "#636363" 
+                 }
+            },
+            {
+                "scope": [
+                    "entity.name.method",
+                    "entity.name.class",
+                    "entity.name.function"
+                ],
+                "settings": {  "fontStyle": "bold",   "foreground": "#AA4A44"  
+               }
+            },
+        ]
+    },
+
+    
+    "editor.roundedSelection": true,
+    "editor.fontLigatures": true,
+    "editor.lightbulb.enabled": false,
+    "editor.lineHeight": 0,
+    "editor.scrollbar.horizontalScrollbarSize": 12,
+
+    "editor.codeLens": false,
+    "workbench.activityBar.visible": true,
+    "files.autoSave": "off",
+    "editor.codeLens": false,
+    "editor.links": true,
+
+    "editor.showUnused": true,
+    "editor.smoothScrolling": false,
+    "editor.wordWrap": "off",
+    "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.revealDefinition",
+    "C_Cpp.commentContinuationPatterns": [
+        "/**"
+    ],
+   
+}
