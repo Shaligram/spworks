@@ -49,7 +49,6 @@
     "update.enableWindowsBackgroundUpdates": false,
     "update.showReleaseNotes": false,
     "workbench.editor.enablePreview": false,
-    "workbench.sideBar.location": "right",
     "explorer.openEditors.visible": 50,
     "breadcrumbs.enabled": false,
     "editor.cursorStyle": "line",
@@ -62,8 +61,8 @@
     "editor.hover.enabled": false,
     "editor.glyphMargin": false,
 
-    "editor.selectionHighlight": false,
-    "editor.occurrencesHighlight": true,
+    "editor.selectionHighlight": true,
+    "editor.occurrencesHighlight": false,
     "editor.semanticHighlighting.enabled": false,
     "editor.tokenColorCustomizations":
     {
@@ -213,5 +212,16 @@
     "C_Cpp.commentContinuationPatterns": [
         "/**"
     ],
+    "search.experimental.closedNotebookRichContentResults": true,
+    "search.quickOpen.includeSymbols": true,
+    "search.searchEditor.reusePriorSearchConfiguration": true,
    
+
+    "workbench.colorCustomizations": {
+        "editor.selectionBackground": "#FFFF99",
+        "editor.selectionHighlightBackground": "#FFFF99"
+    },
+    "workbench.sideBar.location": "right",
+
+  
 }
